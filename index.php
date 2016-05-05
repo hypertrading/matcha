@@ -9,6 +9,9 @@ $config = [
 
 $app = new \Slim\App(["settings" => $config]);
 
+$container = $app->getContainer();
+$container['view'] = new \Slim\Views\PhpRenderer("../templates/");
+
 $app->get('/', function () {
    require 'views/home.php';
 });
