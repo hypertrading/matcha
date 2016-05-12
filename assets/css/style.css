@@ -1,4 +1,4 @@
-html {
+html, body {
     height: 100%;
 }
 body
@@ -9,9 +9,22 @@ body
     min-height: 100%;
     position: relative;
 }
+
+.page {
+    min-height: 100%;
+    position: relative;
+}
+.bloc-principal {
+    padding-bottom: 60px;
+}
+.main-footer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
 h1,h2,h3,h4,h5{
     font-family: 'Seaweed Script', cursive;
-    color: #315C7F;
     text-shadow: #A8D8FF 2px 2px 10px;
 }
 h1{
@@ -22,139 +35,18 @@ h2{
 }
 a{
     text-decoration: none;
-    color: black;
 }
-p, a, input, label{
-    color: #3E606F;
+#logo{
+    max-width: 45px;
 }
-.clear{
-    clear: both;
-    visibility: hidden;
-}
-.hidden{
-    visibility: hidden;
-}
-.main{
-    margin: 0 auto;
-    max-width: 1100px;
-    width: 100%;
-}
-.border-red{
-    border: 1px red solid;
-}
-.float-right{
-    float: right;
-}
-.float-left{
-    float: left;
-}
-
-
 
 /**
 ====                            Header
 **/
-header{
-    background-color: #7A7D7F;
-    margin: 0;
-}
-.head{
-    margin: 0 auto;
-    width: 90vw;
-    max-width: 1100px;
-}
-.logo{
-    width: 15vw;
-    max-width: 150px;
-    margin: 10px 0 10px 0;
-}
-.button-nav{
-    position: relative;
-    top: 10px;
-    height: 0;
-}
-.button{
-    color: #fff;
-    border: #315C7F 1px solid;
-    padding : 6px 12px 6px 12px;
-    background-color: #315C7F;
-    cursor: pointer;
-    transition: all .4s;
-}
-.button:hover{
-    border: #34495E 1px solid;
-    background: #34495E;
-    color: #39D2B4;
-}
-
 
 
 
 /**
 ====                           Footer
 **/
-.push{
-    height: 50px;
-}
-footer{
-    background-color: #7A7D7F;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-footer p{
-    color: white;
-}
 
-/* styles de base si JS est activé */
-.js .input-file-container {
-    position: relative;
-    width: 200px;
-}
-.js .input-file-trigger {
-    display: block;
-    padding: 14px 45px;
-    background: #315C7F;
-    color: #fff;
-    font-size: 1em;
-    transition: all .4s;
-    cursor: pointer;
-}
-.js .input-file {
-    position: absolute;
-    top: 0; left: 0;
-    width: 200px;
-    padding: 14px 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-/* quelques styles d'interactions */
-.js .input-file:hover + .input-file-trigger,
-.js .input-file:focus + .input-file-trigger,
-.js .input-file-trigger:hover,
-.js .input-file-trigger:focus {
-    background: #34495E;
-    color: #39D2B4;
-}
-
-/* styles du retour visuel */
-.file-return {
-    margin: 0;
-}
-.file-return:not(:empty) {
-    margin: 1em 0;
-}
-.js .file-return {
-    font-style: italic;
-    font-size: .9em;
-    font-weight: bold;
-}
-/* on complète l'information d'un contenu textuel
-   uniquement lorsque le paragraphe n'est pas vide */
-.js .file-return:not(:empty):before {
-    content: "Selected file: ";
-    font-style: normal;
-    font-weight: normal;
-}

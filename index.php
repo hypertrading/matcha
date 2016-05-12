@@ -1,23 +1,32 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
+// Includes & required
+session_start();
 require 'vendor/autoload.php';
-$config = [
-    'settings' => [
-        'displayErrorDetails' => true]];
+require 'vendor/slim/slim/Slim/Slim.php';
 
-$app = new \Slim\App(["settings" => $config]);
+//Init Slim
+\Slim\Slim::registerAutoloader();
+$config = array(
+    'templates.path' => 'views',
+    'debug' => true);
+$app = new \Slim\Slim($config);
 
-$container = $app->getContainer();
-$container['view'] = new \Slim\Views\PhpRenderer("../templates/");
 
-$app->get('/', function () {
-   require 'views/home.php';
-});
+//Routes
+$app->get('/', function() use ($app)
+{
+   $app->flash('info', 'Coucou');
+   $app->render('header.php');
+   $app->render('home.php');
+})->name('home');
 
-$app->render('header.php');
-//require 'views/header.php';
+$app->get('/connexion', function() use ($app)
+{
+   $app->flash('info', 'Coucou');
+   $app->render('home.php');
+})->name('connexion');
+
+
 $app->run();
-require 'views/footer.php';
+$app->render('footer.php');
 ?>
