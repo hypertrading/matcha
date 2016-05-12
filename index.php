@@ -1,32 +1,33 @@
 <?php
-// Includes & required
-session_start();
-require 'vendor/autoload.php';
-require 'vendor/slim/slim/Slim/Slim.php';
+define ('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
+define ('ROOT',str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 
-//Init Slim
-\Slim\Slim::registerAutoloader();
-$config = array(
-    'templates.path' => 'views',
-    'debug' => true);
-$app = new \Slim\Slim($config);
+require (ROOT.'core/VK_Controller.php');
 
+$param = explode('/', $_GET['p']);
+if($param[0] != '')
+   $controller = $param[0];
+else
+   $controller = 'Welcome';
+if(isset($param[1]))
+   $action = $param[1];
+else
+   $action = 'index';
 
-//Routes
-$app->get('/', function() use ($app)
-{
-   $app->flash('info', 'Coucou');
-   $app->render('header.php');
-   $app->render('home.php');
-})->name('home');
-
-$app->get('/connexion', function() use ($app)
-{
-   $app->flash('info', 'Coucou');
-   $app->render('home.php');
-})->name('connexion');
-
-
-$app->run();
-$app->render('footer.php');
+if(file_exists(ROOT.'controllers/'.$controller.'.php')){
+   require('controllers/'.$controller.'.php');
+   $controller = new $controller();
+   if (method_exists($controller, $action)) {
+      $controller->$action();
+   } else {
+      require 'controllers/Welcome.php';
+      $welcome = new Welcome();
+      $welcome->page_not_found();
+   }
+}
+else{
+   require 'controllers/Welcome.php';
+   $welcome = new Welcome();
+   $welcome->page_not_found();
+}
 ?>

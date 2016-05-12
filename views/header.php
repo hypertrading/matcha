@@ -4,9 +4,9 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <title>Matcha</title>
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon.png">
+    <link href="<?= $this->base_url();?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?= $this->base_url();?>assets/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->base_url();?>assets/img/favicon.png">
     <link href='https://fonts.googleapis.com/css?family=Seaweed+Script' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -21,15 +21,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a  href="#"><img src="assets/img/logo.png" alt="Icone du menu" id="logo"></a>
+                    <a  href="<?= $this->base_url();?>welcome/index"><img src="<?= $this->base_url();?>assets/img/logo.png" alt="Icone du menu" id="logo"></a>
                 </div>
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Accueil</a></li>
-                        <li><a href="#">Résultats</a></li>
+                        <li><a href="<?= $this->base_url();?>welcome/index">Accueil</a></li>
                         <?php if(!isset($_SESSION['user']['id'])){ ?>
                             <li>
-                                <a href="#">Connexion</a>
+                                <a href="<?= $this->base_url();?>security/connexion">Connexion</a>
                             </li>
                         <?php }
                         else { ?>
@@ -61,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <?php if(isset($flash['info'])){
-            echo "<p>".$flash['info']."</p>";
+        <?php if(isset($info)){
+            echo "<p>".$info."</p>";
         } ?>
         <div class="container">
