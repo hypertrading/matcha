@@ -11,22 +11,22 @@
 
                 <div class="col-md-6">
                     <label>Nom* :</label>
-                    <input name="nom" type="text" class="form-control input-lg" placeholder="Nom">
+                    <input name="nom" type="text" value="<?php echo isset($_POST['nom'])? $_POST['nom'] : ''; ?>" class="form-control input-lg" placeholder="Nom">
                 </div>
 
                 <div class="col-md-6">
                     <label>Prénom* :</label>
-                    <input name="prenom" type="text" class="form-control input-lg" placeholder="Prénom">
+                    <input name="prenom" type="text" value="<?php echo isset($_POST['prenom'])? $_POST['prenom'] : ''; ?>" class="form-control input-lg" placeholder="Prénom">
                 </div>
 
                 <div class="col-md-6">
                     <label>Email* :</label>
-                    <input name="email" type="email" class="form-control input-lg" placeholder="Adresse Mail">
+                    <input name="email" type="email" value="<?php echo isset($_POST['email'])? $_POST['email'] : ''; ?>" class="form-control input-lg" placeholder="Adresse Mail">
                 </div>
 
                 <div class="col-md-6">
                     <label>Date de naissance* :</label>
-                    <input name="date_naissance" class="form-control input-lg" type="date" placeholder="Date de naissance">
+                    <input name="date_naissance" value="<?php echo isset($_POST['date_naissance'])? $_POST['date_naissance'] : ''; ?>" class="form-control input-lg" type="date" placeholder="Date de naissance">
                 </div>
 
                 <div class="col-md-6">
@@ -41,7 +41,7 @@
 
                 <div class="col-md-6 text-center">
                     <label class="radio-inline hidden"><input name="sexe" type="radio" value="0" checked></label>
-                    <label class="radio-inline"><input name="sexe" type="radio" value="1">Homme</label>
+                    <label class="radio-inline"><input name="sexe" type="radio" value="1" >Homme</label>
                     <label class="radio-inline"><input name="sexe" type="radio" value="2">Femme</label>
                 </div>
 
