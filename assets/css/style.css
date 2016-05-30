@@ -48,6 +48,10 @@ a{
 .photo_profil{
     max-width: 150px;
 }
+.tuile{
+    max-width: 100px;
+    max-height: 300px;
+}
 
 /**
 ====                            Header

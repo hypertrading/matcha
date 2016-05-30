@@ -19,7 +19,7 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
-    public function update_last_login($id) {
+    function update_last_login($id) {
         $this->db->query("UPDATE `user` SET `date_last_login`='".date('Y-m-d H:i:s')."' WHERE id=".$id);
     }
     function get_profil($pseudo) {
@@ -41,8 +41,15 @@ class User_model extends VK_Model {
                   ON u_t.tag_id = t.id
                   WHERE u_t.user_id = '$uid'";
         if($result = $this->db->query($query))
-            return $result->fetchAll();
+            return $result->fetchAll(PDO::FETCH_ASSOC);
         return FALSE;
+    }
+    function get_profils_for($id, $sexe){
+        if($sexe == 0){
+            $query = "SELECT id, prenom, nom, date_naissance FROM `user` WHERE status = 1 AND id <> $id";
+            $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
     }
 }
 ?>

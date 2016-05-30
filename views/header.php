@@ -32,6 +32,9 @@
                             </li>
                         <?php }
                         else { ?>
+                            <li>
+                                <a href="<?= $this->base_url();?>match/decouverte">Decouverte</a>
+                            </li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                     <i class="glyphicon glyphicon-user"></i>
@@ -39,7 +42,9 @@
                                     <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?= $this->base_url();?>user/profil?t=vklepper">- Voir mon profil</a></li>
+                                    <li><a href="<?= $this->base_url();?>user/my_profil">- Mon profil</a></li>
+                                    <li><a href="<?= $this->base_url();?>">- Messagerie</a></li>
+                                    <li><a href="<?= $this->base_url();?>">- Tableau de bord</a></li>
                                     <li><a href="<?= $this->base_url();?>security/logout">- Me déconnecter</a></li>
                                 </ul>
                             </li>
