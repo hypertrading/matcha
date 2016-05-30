@@ -8,8 +8,7 @@ class User_model extends VK_Model {
         return FALSE;
     }
 
-    function insert_user($data)
-    {
+    function insert_user($data) {
         extract($data);
         $password = hash('whirlpool', $password);
         $date_register = date("Y-m-d H:i:s");
@@ -20,21 +19,29 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
-    public function update_last_login($id){
+    public function update_last_login($id) {
         $this->db->query("UPDATE `user` SET `date_last_login`='".date('Y-m-d H:i:s')."' WHERE id=".$id);
     }
-    function get_profil($pseudo)
-    {
+    function get_profil($pseudo) {
         $query = "SELECT id, pseudo, description, date_naissance, date_last_login  FROM `user` WHERE `pseudo` = '$pseudo'";
         if($result = $this->db->query($query))
             return $result->fetch();
         return FALSE;
     }
-    function edit_description($id, $description)
-    {
+    function edit_description($id, $description) {
         $query = "UPDATE `user` SET `description`='$description' WHERE `id`='$id'";
         if($this->db->query($query))
             return TRUE;
+        return FALSE;
+    }
+    function get_tag($uid){
+        $query = "SELECT t.nom 
+                  FROM `tag` AS t 
+                  LEFT JOIN `user_tag` AS u_t 
+                  ON u_t.tag_id = t.id
+                  WHERE u_t.user_id = '$uid'";
+        if($result = $this->db->query($query))
+            return $result->fetchAll();
         return FALSE;
     }
 }

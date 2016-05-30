@@ -48,14 +48,34 @@ include 'views/header.php';
     </div>
 <div class="row">
     <div class="col-md-6">
-        <h5>Description</h5>
+        <h4>Description</h4>
         <p>
             <?= $description?>
             <a href="#" data-toggle="modal" data-target=".edit-description"><i class="glyphicon glyphicon-edit"></i></a>
         </p>
-
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Tags</h4>
+        <p>
+            <?php foreach ($tag as $tnom)
+                echo "<span class='label label-default'>
+                    ".$tnom['nom']." 
+                    <a href='".$this->base_url()."user/remove_tag?t=".$tnom['nom']."'>
+                    <i class='glyphicon glyphicon-remove'></i></a></span>  ";
+            ?>
+        </p>
+        <form method="post" action="<?= $this->base_url()?>user/add_tag">
+            <label>
+                Ajouter un tag
+                <input type="text" name="tag">
+            </label>
+        </form>
+    </div>
+</div>
+
 
 
 <!-- Ajouter une photo-->

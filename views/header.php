@@ -28,7 +28,7 @@
                         <li><a href="<?= $this->base_url();?>">Accueil</a></li>
                         <?php if(!isset($_SESSION['user']['id'])){ ?>
                             <li>
-                                <a href="<?= $this->base_url();?>security/connexion">Connexion</a>
+                                <a href="<?= $this->base_url();?>Security/connexion">Connexion</a>
                             </li>
                         <?php }
                         else { ?>

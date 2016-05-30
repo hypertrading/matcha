@@ -6,7 +6,7 @@ require_once (ROOT.'core/VK_Controller.php');
 
 $param = explode('/', $_GET['p']);
 if($param[0] != '')
-   $controller = $param[0];
+   $controller = ucfirst($param[0]);
 else
    $controller = 'Welcome';
 if(isset($param[1]))
