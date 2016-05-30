@@ -1,12 +1,13 @@
 <?php
 include_once 'core/VK_Model.php';
 class Security_model extends VK_Model {
-   function insert_token($user_id, $token){
+   function insert_token($token){
        $this->db->exec("INSERT INTO `token` (`token`) VALUES ('$token')");
    }
     function token_match($token)
     {
-        if($this->db->query("SELECT COUNT(id) FROM `token` WHERE token = '$token'"))
+        $i = $this->db->query("SELECT COUNT(id) FROM `token` WHERE token = '$token'")->fetch();
+        if($i['COUNT(id)'] == 1)
             return TRUE;
         return FALSE;
     }
@@ -20,5 +21,6 @@ class Security_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
+
 }
 ?>

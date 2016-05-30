@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form class="form col-md-12 center-block" method="post" action="<?= $this->base_url()?>security/authentification">
                 <div class="form-group">
-                    <input name="email" type="email" class="form-control input-lg" placeholder="Email">
+                    <input name="pseudo" type="text" class="form-control input-lg" placeholder="Pseudo">
                 </div>
                 <div class="form-group">
                     <input name="password" type="password" class="form-control input-lg" placeholder="Mot de passe">

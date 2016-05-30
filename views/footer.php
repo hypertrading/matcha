@@ -7,6 +7,6 @@
     </div>
 </footer>
 <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="<?= $this->base_url();?>assets/js/bootstrap.min.js"></script>
 </body>
 </html>

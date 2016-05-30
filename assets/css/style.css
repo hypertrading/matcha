@@ -39,6 +39,15 @@ a{
 #logo{
     max-width: 45px;
 }
+.other-pics{
+    max-width: 100px;
+}
+.mini-circle{
+    max-width: 40px;
+}
+.photo_profil{
+    max-width: 150px;
+}
 
 /**
 ====                            Header

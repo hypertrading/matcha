@@ -21,11 +21,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a  href="<?= $this->base_url();?>welcome/index"><img src="<?= $this->base_url();?>assets/img/logo.png" alt="Icone du menu" id="logo"></a>
+                    <a  href="<?= $this->base_url();?>"><img src="<?= $this->base_url();?>assets/img/logo.png" alt="Icone du menu" id="logo"></a>
                 </div>
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= $this->base_url();?>welcome/index">Accueil</a></li>
+                        <li><a href="<?= $this->base_url();?>">Accueil</a></li>
                         <?php if(!isset($_SESSION['user']['id'])){ ?>
                             <li>
                                 <a href="<?= $this->base_url();?>security/connexion">Connexion</a>
@@ -39,8 +39,8 @@
                                     <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">- Voir mon profil</a></li>
-                                    <li><a href="#">- Me déconnecter</a></li>
+                                    <li><a href="<?= $this->base_url();?>user/profil?t=vklepper">- Voir mon profil</a></li>
+                                    <li><a href="<?= $this->base_url();?>security/logout">- Me déconnecter</a></li>
                                 </ul>
                             </li>
                         <?php } ?>

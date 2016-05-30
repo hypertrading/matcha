@@ -1,32 +1,7 @@
 <?php
-class Security extends VK_Controller{
+class Security extends VK_Controller {
     function connexion(){
         $this->views('security/connexion');
-    }
-    function authentification(){
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == FALSE) {
-            $this->set (array ('info' => 'Le champ email n\'est pas conforme.'));
-            $this->views('security/connexion');
-        }
-        else if(preg_match("/[a-zA-Z0-9!?,;.&\"'-_@)\][{}\(]/", $_POST['password']) != 1){
-            $this->set (array ('info' => 'Le champ mot de passe n\'est pas conforme.'));
-            $this->views('security/connexion');
-        }
-        else{
-            if ($user = $this->user_model->get_one_user($_POST['email']))
-            {
-                $passwd = hash("whirlpool", $_POST['password']);
-                if ($passwd == $user['password'] && $user['status'] == 1)
-                {
-                    $_SESSION['user'] = $user;
-                    if ($user['droits'] == 1)
-                        $_SESSION['admin'] = 1;
-                    $this->views('home');
-                }
-                return FALSE;
-            }
-            return FALSE;
-        }
     }
     function register(){
         $this->views('security/register');
@@ -34,9 +9,43 @@ class Security extends VK_Controller{
     function lost_password(){
         $this->views('security/lost_password');
     }
-
+    function authentification(){
+        if (preg_match("/[A-Za-z _àèéùç-]/", $_POST['pseudo']) != 1) {
+            $this->set (array ('info' => 'Le champ pseudo n\'est pas conforme.'));
+            $this->views('security/connexion');
+        }
+        else if(preg_match("/[a-zA-Z0-9!?,;.&\"'-_@)\][{}\(]/", $_POST['password']) != 1){
+            $this->set (array ('info' => 'Le champ mot de passe n\'est pas conforme.'));
+            $this->views('security/connexion');
+        }
+        else
+        {
+            if ($user = $this->user_model->get_one_user($_POST['pseudo']))
+            {
+                $passwd = hash("whirlpool", $_POST['password']);
+                if ($passwd == $user['password'] && $user['status'] == 1)
+                {
+                    $_SESSION['user'] = $user;
+                    unset($_SESSION['user']['password']);
+                    if ($user['droits'] == 1)
+                        $_SESSION['admin'] = 1;
+                    $this->user_model->update_last_login($user['id']);
+                    header('Location: ../welcome/index');
+                }
+                else {
+                    $this->set(array('info' => 'Pas de correspondance email/mot de passe.'));
+                    $this->views('security/connexion');
+                }
+            }
+            else {
+                $this->set(array('info' => 'Pas de correspondance email/mot de passe.'));
+                $this->views('security/connexion');
+            }
+        }
+    }
     function new_user(){
         $inputs = array(
+            'pseudo' => $_POST['pseudo'],
             'nom' => $_POST['nom'],
             'prenom' => $_POST['prenom'],
             'email' => $_POST['email'],
@@ -44,7 +53,11 @@ class Security extends VK_Controller{
             'password' => $_POST['password'],
             'sexe' => $_POST['sexe']);
 
-        if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['nom']) != 1 ) {
+        if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['pseudo']) != 1 ) {
+            $this->set(array('info' => 'Le champ speudo n\'est pas conforme.'));
+            $this->views('security/register');
+        }
+        else if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['nom']) != 1 ) {
             $this->set(array('info' => 'Le champ nom n\'est pas conforme.'));
             $this->views('security/register');
         }
@@ -74,13 +87,13 @@ class Security extends VK_Controller{
         }
         else if($this->user_model->get_one_user($inputs['email']) == FALSE) {
             if($this->user_model->insert_user($inputs) == TRUE) {
-                $user = $this->user_model->get_one_user($inputs);
+                $user = $this->user_model->get_one_user($inputs['pseudo']);
                 $id = (int)$user['id'];
                 $entropy = mt_rand();
                 $binary_token = pack('IS', $id, $entropy);
                 $token = rtrim(strtr(base64_encode($binary_token), '+/', '-_'), '=');
                 $link = $this->base_url()."security/valid_acount?t=".$token;
-                $this->security_model->insert_token($user['id'], $token);
+                $this->security_model->insert_token($token);
                 $to = $_POST['email'];
                 $subject = "Finisez votre inscription sur Matcha";
                 $message = '<html>
@@ -112,16 +125,19 @@ class Security extends VK_Controller{
         if (!$token) {
             $this->set(array('info' => 'Le lien n\'est pas valide'));
             $this->views('security/connexion');
+            exit;
         }
-        $binary_token = base64_decode($token);
+        $binary_token = base64_decode(str_pad(strtr($token, '-_', '+/'), strlen($token) % 4, '=', STR_PAD_RIGHT));
         if (!$binary_token) {
             $this->set(array('info' => 'Le token n\'est pas valide 1'));
             $this->views('security/connexion');
+            exit;
         }
         $data = @unpack('Iid/Sentropy', $binary_token);
         if (!$data) {
             $this->set(array('info' => 'Le token n\'est pas valide 2'));
             $this->views('security/connexion');
+            exit;
         }
         if($this->security_model->token_match($token))
         {
@@ -130,9 +146,15 @@ class Security extends VK_Controller{
                 $this->security_model->rm_token($token);
                 $this->set(array('info' => 'Votre compte à bien été validé ! Connectez vous pour continuer.'));
                 $this->views('security/connexion');
+                exit;
             }
         }
-
     }
+    function logout(){
+        unset($_SESSION['user']);
+        $this->set(array('info' => 'A bientot !'));
+        header('Location: ../welcome/index');
+    }
+
 }
 ?>
