@@ -65,7 +65,9 @@
                 </div>
             </div>
         </div>
-        <?php if(isset($info)){
-            echo "<p>".$info."</p>";
-        } ?>
         <div class="container">
+        <?php if(isset($info)){ ?>
+            <div class="alert" role="alert">
+            <p><?= $info ?></p>
+                </div>
+        <?php } ?>

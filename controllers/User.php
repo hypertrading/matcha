@@ -1,14 +1,21 @@
 <?php
 class User extends VK_Controller {
     function my_profil(){
-        $pseudo = $_SESSION['user']['pseudo'];
-        $user = $this->user_model->get_profil($pseudo);
+        $id = $_SESSION['user']['id'];
+        $user = $this->user_model->get_profil($id);
         if(file_exists('assets/img/user_photo/'.$user['id'].'.jpg'))
             $user['images'][0] = 'assets/img/user_photo/'.$user['id'].'.jpg';
         $tag = $this->user_model->get_tag($user['id']);
         $user['tag'] = $tag;
         $this->set($user);
         $this->views('user/my_profil');
+    }
+    function profil($id){
+        $profil['profil'] = $this->user_model->get_profil($id);
+        $tag = $this->user_model->get_tag($profil['profil']['id']);
+        $profil['profil']['tag'] = $tag;
+        $this->set($profil);
+        $this->views('user/profil');
     }
     function edit_description() {
         if (preg_match("/[A-Za-z0-9 '\",.;:!?_àêèéùç-]/", $_POST['description']) != 1 ) {
@@ -49,7 +56,6 @@ class User extends VK_Controller {
                 $this->set(array('info' => 'Geute'));
                 $this->my_profil();
                 exit;
-
             }
             else {
                 $this->set(array('info' => 'Vous avez deja se tag'));

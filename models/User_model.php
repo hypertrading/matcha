@@ -2,7 +2,7 @@
 include_once 'core/VK_Model.php';
 class User_model extends VK_Model {
     function get_one_user($pseudo){
-        $query = "SELECT id, pseudo, nom, email, sexe, date_naissance, prenom, password, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
+        $query = "SELECT id, pseudo, nom, email, sexe, orientation, date_naissance, prenom, password, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
         if($result = $this->db->query($query))
             return $result->fetch();
         return FALSE;
@@ -22,8 +22,8 @@ class User_model extends VK_Model {
     function update_last_login($id) {
         $this->db->query("UPDATE `user` SET `date_last_login`='".date('Y-m-d H:i:s')."' WHERE id=".$id);
     }
-    function get_profil($pseudo) {
-        $query = "SELECT id, pseudo, description, date_naissance, date_last_login  FROM `user` WHERE `pseudo` = '$pseudo'";
+    function get_profil($id) {
+        $query = "SELECT id, pseudo, nom, prenom, description, date_naissance, date_last_login  FROM `user` WHERE `id` = $id";
         if($result = $this->db->query($query))
             return $result->fetch();
         return FALSE;
@@ -44,12 +44,15 @@ class User_model extends VK_Model {
             return $result->fetchAll(PDO::FETCH_ASSOC);
         return FALSE;
     }
-    function get_profils_for($id, $sexe){
-        if($sexe == 0){
-            $query = "SELECT id, prenom, nom, date_naissance FROM `user` WHERE status = 1 AND id <> $id";
-            $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        }
+    function get_profils_for($uid, $sexe, $orientation){
+        $query = "SELECT id, prenom, nom, date_naissance
+                  FROM `user`
+                  WHERE status = 1
+                  AND id <> $uid
+                  AND `sexe`= $sexe
+                  AND `orientation` <> $orientation";
+        $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 }
 ?>

@@ -151,6 +151,17 @@ include 'views/header.php';
                             Femme
                         </label>
                     </div>
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 0){echo 'active';}?>">
+                                <input type="radio" name="orientation" id="orientation1" value="0" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 0){echo 'checked';}?>> Bisexuel
+                            </label>
+                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 1){echo 'active';}?>">
+                                <input type="radio" name="orientation" id="orientation2" value="1" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 1){echo 'checked';}?>> Hétérosexuel
+                            </label>
+                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 2){echo 'active';}?>">
+                                <input type="radio" name="orientation" id="orientation3" value="2" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 2){echo 'checked';}?>> Homosexuel
+                            </label>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <div class="col-md-12 valider">
