@@ -4,7 +4,7 @@ include 'views/header.php';
 <div class="row">
     <div class="col-md-12">
         <h2>
-            <?= ucfirst($profil['nom']) ?>
+            <?= ucfirst($profil['nom']).' '.ucfirst($profil['prenom']) ?>
         </h2>
     </div>
     <div class="col-md-3">
@@ -16,9 +16,11 @@ include 'views/header.php';
         <?php }?>
     </div>
     <div class="col-md-7">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
+        <div class="col-md-7">
+            <?php for($i = 1; isset($images[$i]); $i++){ ?>
+                <img src="<?= $this->base_url().$images[$i]?>" class="img-thumbnail other-pics">
+            <?php } ?>
+        </div>
     </div>
     <div class="col-md-2">
         <h4>Ces profils vous correspondent</h4>
@@ -54,9 +56,7 @@ include 'views/header.php';
         <p>
             <?php foreach ($profil['tag'] as $tnom)
                 echo "<span class='label label-default'>
-                    ".$tnom['nom']."
-                    <a href='".$this->base_url()."user/remove_tag?t=".$tnom['nom']."'>
-                    <i class='glyphicon glyphicon-remove'></i></a></span>  ";
+                    ".$tnom['nom']."</span>  ";
             ?>
         </p>
     </div>

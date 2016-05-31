@@ -39,5 +39,15 @@ class Tag_model extends VK_Model {
                   AND t.nom = '$tag'";
         $this->db->exec($query);
     }
+    function get_tag($uid){
+        $query = "SELECT t.nom
+                  FROM `tag` AS t
+                  LEFT JOIN `user_tag` AS u_t
+                  ON u_t.tag_id = t.id
+                  WHERE u_t.user_id = '$uid'";
+        if($result = $this->db->query($query))
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        return FALSE;
+    }
 }
 ?>

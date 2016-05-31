@@ -23,9 +23,9 @@ include 'views/header.php';
         <button data-toggle="modal" data-target=".edit_avatar" class="btn">Ajouter une photo</button>
     </div>
     <div class="col-md-7">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
-        <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail other-pics">
+        <?php for($i = 1; isset($images[$i]); $i++){ ?>
+            <img src="<?= $this->base_url().$images[$i]?>" class="img-thumbnail other-pics">
+        <?php } ?>
     </div>
     <div class="col-md-2">
         <h4>Ces profils vous correspondent</h4>

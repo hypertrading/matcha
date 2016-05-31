@@ -3,16 +3,22 @@ class User extends VK_Controller {
     function my_profil(){
         $id = $_SESSION['user']['id'];
         $user = $this->user_model->get_profil($id);
-        if(file_exists('assets/img/user_photo/'.$user['id'].'.jpg'))
-            $user['images'][0] = 'assets/img/user_photo/'.$user['id'].'.jpg';
-        $tag = $this->user_model->get_tag($user['id']);
+        $img = $this->picture_model->get_user_pict($id);
+        for ($i = 0; isset($img[$i]); $i++){
+            $user['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
+        }
+        $tag = $this->tag_model->get_tag($user['id']);
         $user['tag'] = $tag;
         $this->set($user);
         $this->views('user/my_profil');
     }
     function profil($id){
         $profil['profil'] = $this->user_model->get_profil($id);
-        $tag = $this->user_model->get_tag($profil['profil']['id']);
+        $tag = $this->tag_model->get_tag($profil['profil']['id']);
+        $img = $this->picture_model->get_user_pict($id);
+        for ($i = 0; isset($img[$i]); $i++){
+            $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
+        }
         $profil['profil']['tag'] = $tag;
         $this->set($profil);
         $this->views('user/profil');
@@ -26,7 +32,7 @@ class User extends VK_Controller {
         else {
             $this->user_model->edit_description($_SESSION['user']['id'], $_POST['description']);
             $this->set(array('info' => 'Geute'));
-            $this->my_profil();
+            header('Location: my_profil');
             exit;
         }
     }
@@ -36,10 +42,12 @@ class User extends VK_Controller {
         $tmp_image = imagecreatefromjpeg($data);
         $image = imagecreatetruecolor($sizetmp[0], $sizetmp[1]);
         imagecopyresampled($image, $tmp_image, 0, 0, 0, 0, $sizetmp[0], $sizetmp[1], $sizetmp[0], $sizetmp[1]);
-        $path = 'assets/img/user_photo/'.$_SESSION['user']['id'].'.jpg';
+        $pid = $this->picture_model->add_picture($_SESSION['user']['id']);
+        $path = 'assets/img/user_photo/'.$pid.'.jpg';
         imagejpeg($image, $path);
+        unset($_FILES['picture']);
         $this->set(array('info' => 'Geute'));
-        $this->my_profil();
+        header('Location: my_profil');
         exit;
     }
     function add_tag() {
@@ -54,12 +62,12 @@ class User extends VK_Controller {
             if ($this->tag_model->already_tag($_SESSION['user']['id'], $_POST['tag']) == FALSE){
                 $this->tag_model->add_tag($_SESSION['user']['id'], $_POST['tag']);
                 $this->set(array('info' => 'Geute'));
-                $this->my_profil();
+                header('Location: my_profil');
                 exit;
             }
             else {
                 $this->set(array('info' => 'Vous avez deja se tag'));
-                $this->my_profil();
+                header('Location: my_profil');
                 exit;
             }
         }
@@ -67,7 +75,7 @@ class User extends VK_Controller {
     function remove_tag($tag){
         $this->tag_model->remove_tag($_SESSION['user']['id'], $tag);
         $this->set(array('info' => "Vous avez enlever le tag $tag"));
-        $this->my_profil();
+        header('Location: my_profil');
         exit;
     }
 }

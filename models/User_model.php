@@ -34,16 +34,6 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
-    function get_tag($uid){
-        $query = "SELECT t.nom 
-                  FROM `tag` AS t 
-                  LEFT JOIN `user_tag` AS u_t 
-                  ON u_t.tag_id = t.id
-                  WHERE u_t.user_id = '$uid'";
-        if($result = $this->db->query($query))
-            return $result->fetchAll(PDO::FETCH_ASSOC);
-        return FALSE;
-    }
     function get_profils_for($uid, $sexe, $orientation){
         $query = "SELECT id, prenom, nom, date_naissance
                   FROM `user`

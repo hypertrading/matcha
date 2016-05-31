@@ -28,8 +28,8 @@ class Match extends VK_Controller {
         }
         foreach ($profils as &$profil) {
             $occurencetag = 0;
-            $ptag = $this->user_model->get_tag($profil['id']);
-            $mytag = $this->user_model->get_tag($uid);
+            $ptag = $this->tag_model->get_tag($profil['id']);
+            $mytag = $this->tag_model->get_tag($uid);
             foreach ($mytag as $key => $tmptag) {
                 foreach ($ptag as $key2 => $tmptag2) {
                     if ($tmptag['nom'] == $tmptag2['nom']) {
@@ -37,9 +37,12 @@ class Match extends VK_Controller {
                     }
                 }
             }
-              $profil['score'] = $occurencetag;
-//            print_r($profil);
-//            echo '<br>';
+            $img = $this->picture_model->get_user_pict($profil['id']);
+            if(isset($img[0]))
+                $profil['images'] = 'assets/img/user_photo/'.$img[0].'.jpg';
+            else
+                $profil['images'] = 'assets/img/user_photo/defaultprofil.gif';
+            $profil['score'] = $occurencetag;
         }
         function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
             $sort_col = array();
@@ -49,7 +52,6 @@ class Match extends VK_Controller {
             array_multisort($sort_col, $dir, $arr);
         }
         array_sort_by_column($profils, 'score');
-//        print_r($profils);
         $data['profils'] = $profils;
         $this->set($data);
         $this->views('decouverte');

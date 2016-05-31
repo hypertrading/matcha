@@ -6,7 +6,7 @@ include 'header.php';
 foreach ($profils AS $profil){ ?>
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-            <img class="img-responsive tuile" src="<?=$this->base_url()?>assets/img/user_photo/<?= $profil['id']?>.jpg" alt="Photo de profil d'un utilisateur">
+            <img class="img-responsive tuile" src="<?=$this->base_url().$profil['images']?>" alt="Photo de profil d'un utilisateur">
             <div class="caption">
                 <h3><?= $profil['prenom'].' '.$profil['nom']?></h3>
                 <p>
