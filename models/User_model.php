@@ -62,5 +62,9 @@ class User_model extends VK_Model {
                   WHERE u.id = $id";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
+    function as_notification($uid){
+        $query = "SELECT count(*) FROM `notification` WHERE `user_id` = $uid";
+        return $this->db->query($query)->fetchColumn();
+    }
 }
 ?>

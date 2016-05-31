@@ -48,13 +48,13 @@ class Match extends VK_Controller {
                 $profil['images'] = 'assets/img/user_photo/'.$img[0].'.jpg';
             else
                 $profil['images'] = 'assets/img/user_photo/defaultprofil.gif';
-            if($this->like_model->is_like($uid, $pid) == 1)
+            if($this->like_model->is_like($uid, $pid) >= 1)
                 $profil['like'] = TRUE;
             else
                 $profil['like'] = FALSE;
             $profil['score'] = $occurencetag;
         }
-        
+
         //ordonne les profils pour afficher les meilleurs en premiers
         function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
             $sort_col = array();

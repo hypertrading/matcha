@@ -49,8 +49,13 @@ a{
     max-width: 150px;
 }
 .tuile{
-    max-width: 100px;
     max-height: 200px;
+}
+.thumbnail{
+    height: 325px;
+}
+.red{
+    color: red;
 }
 
 /**

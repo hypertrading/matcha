@@ -40,11 +40,12 @@
                                     <i class="glyphicon glyphicon-user"></i>
                                     <?php echo $_SESSION['user']['prenom']." ".$_SESSION['user']['nom']; ?>
                                     <b class="caret"></b>
+                                    <i id="notif_icon" class="glyphicon glyphicon-flag red hidden"></i>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?= $this->base_url();?>user/my_profil">- Mon profil</a></li>
                                     <li><a href="<?= $this->base_url();?>">- Messagerie</a></li>
-                                    <li><a href="<?= $this->base_url();?>user/dashbord">- Tableau de bord</a></li>
+                                    <li><a href="<?= $this->base_url();?>user/dashbord">- Tableau de bord <i id="notif_icon2" class="glyphicon glyphicon-flag red hidden"></i></a></li>
                                     <li><a href="<?= $this->base_url();?>security/logout">- Me déconnecter</a></li>
                                 </ul>
                             </li>

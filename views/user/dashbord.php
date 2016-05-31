@@ -14,6 +14,19 @@ include 'views/header.php';
         <?php } ?>
         </ul>
     </div>
+
+    <div class="col-md-6">
+        <h3>Ils me likes</h3>
+        <ul>
+            <?php foreach($likes as $like){?>
+                <li><?= $like['date']?>
+                    <a href="<?=$this->base_url()?>user/profil?t=<?= $like['id']?>">
+                        <?= $like['prenom'].' '.$like['nom']?>
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
 </div>
 
 <?php

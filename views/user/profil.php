@@ -5,6 +5,16 @@ include 'views/header.php';
     <div class="col-md-12">
         <h2>
             <?= ucfirst($profil['nom']).' '.ucfirst($profil['prenom']) ?>
+
+        <?php if($like == TRUE){ ?>
+            <a href="<?=$this->base_url()?>match/unlike?t=<?=$profil['id']?>" class="btn btn-warning" role="button">
+                <i class="glyphicon glyphicon-heart">
+                </i>
+            </a>
+        <?php }
+        else {?>
+            <a href="<?=$this->base_url()?>match/like?t=<?=$profil['id']?>" class="btn btn-primary" role="button">Like</a>
+        <?php } ?>
         </h2>
         <p>Dernier connexion : <?=$profil['date_last_login']?></p>
     </div>

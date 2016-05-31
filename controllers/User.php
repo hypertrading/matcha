@@ -12,23 +12,31 @@ class User extends VK_Controller {
         $this->set($user);
         $this->views('user/my_profil');
     }
-    function profil($id){
-        $this->user_model->log_visit($_SESSION['user']['id'], $id);
-        $profil['profil'] = $this->user_model->get_profil($id);
+    function profil($pid){
+        $uid = $_SESSION['user']['id'];
+        $this->user_model->log_visit($uid, $pid);
+        $profil['profil'] = $this->user_model->get_profil($pid);
         $tag = $this->tag_model->get_tag($profil['profil']['id']);
-        $img = $this->picture_model->get_user_pict($id);
+        $img = $this->picture_model->get_user_pict($pid);
         for ($i = 0; isset($img[$i]); $i++){
             $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
         }
         $profil['profil']['tag'] = $tag;
+        if($this->like_model->is_like($uid, $pid) >= 1)
+            $profil['like'] = TRUE;
+        else
+            $profil['like'] = FALSE;
         $this->set($profil);
         $this->views('user/profil');
     }
     function dashbord(){
-        $visits = $this->user_model->get_visit($_SESSION['user']['id']);
+        $uid = $_SESSION['user']['id'];
+        $visits = $this->user_model->get_visit($uid);
         foreach($visits AS &$visit){
                 $visit['visitor'] = $this->user_model->get_profil_min($visit['user_visit']);
         }
+        $likes = $this->like_model->get_like($uid);
+        $data['likes'] = $likes;
         $data['visits'] = $visits;
         $this->set($data);
         $this->views('user/dashbord');

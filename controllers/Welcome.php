@@ -24,5 +24,14 @@ class Welcome extends VK_Controller{
     function page_not_found(){
         $this->views('error_404');
     }
+    function notification(){
+        $uid = $_SESSION['user']['id'];
+        if($this->user_model->as_notification($uid) >= 1){
+            echo 1;
+        }
+        else
+            echo 0;
+        exit;
+    }
 }
 ?>

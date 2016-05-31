@@ -13,5 +13,13 @@ class Like_model extends VK_Model {
         $query = "SELECT COUNT(*) FROM `likes` WHERE `user_like` = $uid AND `user_liked` = $pid";
         return $this->db->query($query)->fetchColumn();
     }
+    function get_like($uid){
+        $query = "SELECT u.nom, u.prenom, u.id, l.date
+                  FROM `likes` AS l
+                  LEFT JOIN `user` AS u
+                  ON  l.user_like = u.id
+                  WHERE l.user_liked = $uid";
+        return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
