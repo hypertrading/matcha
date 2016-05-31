@@ -18,7 +18,7 @@ class Welcome extends VK_Controller{
         }
         $ip = get_ip();
 
-        echo "votre ip : $ip";
+       // echo "votre ip : $ip";
         $this->views('home');
     }
     function page_not_found(){

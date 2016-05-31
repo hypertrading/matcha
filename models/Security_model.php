@@ -21,6 +21,5 @@ class Security_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
-
 }
 ?>
