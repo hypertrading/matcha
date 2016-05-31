@@ -13,6 +13,7 @@ class User extends VK_Controller {
         $this->views('user/my_profil');
     }
     function profil($id){
+        $this->user_model->log_visit($_SESSION['user']['id'], $id);
         $profil['profil'] = $this->user_model->get_profil($id);
         $tag = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($id);
@@ -22,6 +23,15 @@ class User extends VK_Controller {
         $profil['profil']['tag'] = $tag;
         $this->set($profil);
         $this->views('user/profil');
+    }
+    function dashbord(){
+        $visits = $this->user_model->get_visit($_SESSION['user']['id']);
+        foreach($visits AS &$visit){
+                $visit['visitor'] = $this->user_model->get_profil_min($visit['user_visit']);
+        }
+        $data['visits'] = $visits;
+        $this->set($data);
+        $this->views('user/dashbord');
     }
     function edit_description() {
         if (preg_match("/[A-Za-z0-9 '\",.;:!?_àêèéùç-]/", $_POST['description']) != 1 ) {

@@ -6,6 +6,7 @@ include 'views/header.php';
         <h2>
             <?= ucfirst($profil['nom']).' '.ucfirst($profil['prenom']) ?>
         </h2>
+        <p>Dernier connexion : <?=$profil['date_last_login']?></p>
     </div>
     <div class="col-md-3">
         <?php if(!isset($images[0])){ ?>
@@ -61,8 +62,6 @@ include 'views/header.php';
         </p>
     </div>
 </div>
-
-
 
 <?php
 include 'views/footer.php';

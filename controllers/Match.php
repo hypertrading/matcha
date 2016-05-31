@@ -8,11 +8,11 @@ class Match extends VK_Controller {
         if($pref_s == 0) {
             if ($usexe == 1) {
                 $profils = $this->user_model->get_profils_for($uid, 1, 1);
-                $profils .= $this->user_model->get_profils_for($uid, 2, 2);
+                $profils = array_merge($profils, $this->user_model->get_profils_for($uid, 2, 2));
             }
             else
                 $profils = $this->user_model->get_profils_for($uid, 1, 2);
-                $profils .= $this->user_model->get_profils_for($uid, 2, 1);
+                $profils = array_merge($profils, $this->user_model->get_profils_for($uid, 2, 1));
         }
         else if ($pref_s == 1) {
             if ($usexe == 1)
