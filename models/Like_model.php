@@ -11,7 +11,9 @@ class Like_model extends VK_Model {
     }
     function is_like($uid, $pid){
         $query = "SELECT COUNT(*) FROM `likes` WHERE `user_like` = $uid AND `user_liked` = $pid";
-        return $this->db->query($query)->fetchColumn();
+        if($this->db->query($query)->fetchColumn() >= 1)
+            return TRUE;
+        return FALSE;
     }
     function get_like($uid){
         $query = "SELECT u.nom, u.prenom, u.id, l.date

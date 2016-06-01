@@ -2,6 +2,11 @@
 class Match extends VK_Controller {
     function decouverte()
     {
+        if(!isset($_SESSION['user'])){
+            $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
+            header('Location: '.$this->base_url());
+            exit;
+        }
         $pref_s = $_SESSION['user']['orientation'];
         $uid = $_SESSION['user']['id'];
         $usexe = $_SESSION['user']['sexe'];
@@ -44,14 +49,8 @@ class Match extends VK_Controller {
                 }
             }
             $img = $this->picture_model->get_user_pict($pid);
-            if(isset($img[0]))
-                $profil['images'] = 'assets/img/user_photo/'.$img[0].'.jpg';
-            else
-                $profil['images'] = 'assets/img/user_photo/defaultprofil.gif';
-            if($this->like_model->is_like($uid, $pid) >= 1)
-                $profil['like'] = TRUE;
-            else
-                $profil['like'] = FALSE;
+            $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
+            $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
             $profil['score'] = $occurencetag;
         }
 
@@ -70,6 +69,7 @@ class Match extends VK_Controller {
     }
     function like($pid){
         $this->like_model->like($_SESSION['user']['id'], $pid);
+        $this->notification_model->add_notification($pid);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }

@@ -17,6 +17,11 @@
                     $('#notif_icon').removeClass('hidden');
                     $('#notif_icon2').removeClass('hidden');
                 }
+                else
+                {
+                    $('#notif_icon').addClass('hidden');
+                    $('#notif_icon2').addClass('hidden');
+                }
             });
         },1000);}
 </script>

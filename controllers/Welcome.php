@@ -26,11 +26,14 @@ class Welcome extends VK_Controller{
     }
     function notification(){
         $uid = $_SESSION['user']['id'];
-        if($this->user_model->as_notification($uid) >= 1){
+        if($this->notification_model->as_notification($uid) >= 1){
+            $_SESSION['notif'] = TRUE;
             echo 1;
         }
-        else
+        else {
+            $_SESSION['notif'] = FALSE;
             echo 0;
+        }
         exit;
     }
 }

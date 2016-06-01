@@ -7,7 +7,6 @@ class User_model extends VK_Model {
             return $result->fetch();
         return FALSE;
     }
-
     function insert_user($data) {
         extract($data);
         $password = hash('whirlpool', $password);
@@ -61,10 +60,6 @@ class User_model extends VK_Model {
                   ON v.user_visited = u.id
                   WHERE u.id = $id";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
-    }
-    function as_notification($uid){
-        $query = "SELECT count(*) FROM `notification` WHERE `user_id` = $uid";
-        return $this->db->query($query)->fetchColumn();
     }
 }
 ?>

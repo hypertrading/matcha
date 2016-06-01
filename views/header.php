@@ -40,7 +40,7 @@
                                     <i class="glyphicon glyphicon-user"></i>
                                     <?php echo $_SESSION['user']['prenom']." ".$_SESSION['user']['nom']; ?>
                                     <b class="caret"></b>
-                                    <i id="notif_icon" class="glyphicon glyphicon-flag red hidden"></i>
+                                    <i id="notif_icon" class="glyphicon glyphicon-flag red <?php echo $_SESSION['notif'] == TRUE ? '' : 'hidden'; ?>"></i>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?= $this->base_url();?>user/my_profil">- Mon profil</a></li>

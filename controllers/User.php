@@ -22,10 +22,8 @@ class User extends VK_Controller {
             $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
         }
         $profil['profil']['tag'] = $tag;
-        if($this->like_model->is_like($uid, $pid) >= 1)
-            $profil['like'] = TRUE;
-        else
-            $profil['like'] = FALSE;
+        $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
+        $this->notification_model->add_notification($pid);
         $this->set($profil);
         $this->views('user/profil');
     }
@@ -38,6 +36,8 @@ class User extends VK_Controller {
         $likes = $this->like_model->get_like($uid);
         $data['likes'] = $likes;
         $data['visits'] = $visits;
+        $_SESSION['notif'] = FALSE;
+        $this->notification_model->rm_notification($uid);
         $this->set($data);
         $this->views('user/dashbord');
     }
