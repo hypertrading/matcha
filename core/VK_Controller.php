@@ -1,20 +1,11 @@
 <?php
-require_once 'models/User_model.php';
-require_once 'models/Security_model.php';
-require_once 'models/Tag_model.php';
-require_once 'models/Picture_model.php';
-require_once 'models/Like_model.php';
-require_once 'models/Notification_model.php';
+foreach (glob("models/*_model.php") as $filename)
+{
+    include_once $filename;
+}
 class VK_Controller{
-    public $user_model;
-    public $security_model;
-    public $tag_model;
-    public $picture_model;
-    public $like_model;
-    public $notification_model;
     public $vars = array();
-    function __construct()
-    {
+    function __construct() {
         $this->user_model = new User_model();
         $this->security_model = new Security_model();
         $this->tag_model = new Tag_model();
@@ -22,11 +13,10 @@ class VK_Controller{
         $this->like_model = new Like_model();
         $this->notification_model = new Notification_model();
     }
-     function set($data){
+     function set($data) {
          $this->vars = array_merge($this->vars, $data);
      }
-
-    function views($filename){
+    function views($filename) {
         extract($this->vars);
         require (ROOT.'views/'.$filename.'.php');
     }
