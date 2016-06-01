@@ -39,6 +39,7 @@ class Match extends VK_Controller {
         foreach ($profils as &$profil) {
             $pid = $profil['id'];
             $occurencetag = 0;
+
             $ptag = $this->tag_model->get_tag($pid);
             $mytag = $this->tag_model->get_tag($uid);
             foreach ($mytag as $key => $tmptag) {
@@ -48,10 +49,15 @@ class Match extends VK_Controller {
                     }
                 }
             }
+            $visit = $this->user_model->already_visit($pid, $uid) ? 2 : 0;
+            $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
             $img = $this->picture_model->get_user_pict($pid);
             $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
             $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
-            $profil['score'] = $occurencetag;
+            $profil['score'] = $occurencetag + $visit + $like_me;
+
+            //echo $profil['nom'].' '.$profil['score'].'<br>';
+
         }
 
         //ordonne les profils pour afficher les meilleurs en premiers

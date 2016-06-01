@@ -11,7 +11,7 @@ class Like_model extends VK_Model {
     }
     function is_like($uid, $pid){
         $query = "SELECT COUNT(*) FROM `likes` WHERE `user_like` = $uid AND `user_liked` = $pid";
-        if($this->db->query($query)->fetchColumn() >= 1)
+        if($this->db->query($query)->fetchColumn() == 1)
             return TRUE;
         return FALSE;
     }
@@ -23,6 +23,12 @@ class Like_model extends VK_Model {
                   WHERE l.user_liked = $uid
                   ORDER BY `date` DESC";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
+    function like_me($uid, $pid){
+        $query = "SELECT COUNT(*) FROM `likes` WHERE `user_like` = $pid AND `user_liked` = $uid";
+        if($this->db->query($query)->fetchColumn() == 1)
+            return TRUE;
+        return FALSE;
     }
 }
 ?>
