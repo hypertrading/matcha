@@ -23,7 +23,7 @@ include 'header.php';
             ?>
         </div>
         <form method="post" action="<?= $this->base_url()?>messagerie/send_msg">
-            <input type="text" name="msg" class="form-control">
+            <input type="text" name="msg" class="form-control" autocomplete="off">
             <button type="submit" name="to" value="<?= $_GET['t']?>" class="btn btn-default">Envoyer</button>
         </form>
     </div>

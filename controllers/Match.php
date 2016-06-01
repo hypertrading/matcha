@@ -46,9 +46,6 @@ class Match extends VK_Controller {
                     if ($tmptag['nom'] == $tmptag2['nom']) {
                         $occurencetag++;
                     }
-                }foreach (glob("classes/*.php") as $filename)
-                {
-                    include $filename;
                 }
             }
             $img = $this->picture_model->get_user_pict($pid);

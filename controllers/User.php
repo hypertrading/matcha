@@ -14,7 +14,10 @@ class User extends VK_Controller {
     }
     function profil($pid){
         $uid = $_SESSION['user']['id'];
-        $this->user_model->log_visit($uid, $pid);
+        if(!$this->user_model->already_visit($uid, $pid)){
+            $this->user_model->log_visit($uid, $pid);
+            $this->notification_model->add_notification($pid, 1);
+        }
         $profil['profil'] = $this->user_model->get_profil($pid);
         $tag = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($pid);
@@ -23,7 +26,6 @@ class User extends VK_Controller {
         }
         $profil['profil']['tag'] = $tag;
         $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
-        $this->notification_model->add_notification($pid, 1);
         $this->set($profil);
         $this->views('user/profil');
     }

@@ -49,9 +49,15 @@ class User_model extends VK_Model {
         $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    function already_visit($uid, $id_visited){
+        $query = "SELECT * FROM `visit` WHERE `user_visited` = $id_visited AND `user_visit` = $uid";
+        return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
     function log_visit($uid, $id_visited){
         $query = "INSERT INTO `visit` (`user_visited`, `user_visit`) VALUES ($id_visited, $uid)";
-        $this->db->query($query);
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
     }
     function get_visit($id){
         $query = "SELECT v.date, v.user_visit
