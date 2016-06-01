@@ -20,7 +20,8 @@ class Like_model extends VK_Model {
                   FROM `likes` AS l
                   LEFT JOIN `user` AS u
                   ON  l.user_like = u.id
-                  WHERE l.user_liked = $uid";
+                  WHERE l.user_liked = $uid
+                  ORDER BY `date` DESC";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
 }

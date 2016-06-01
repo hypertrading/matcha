@@ -1,23 +1,33 @@
 <?php
 include 'header.php';
 ?>
-
 <h2><small>Messagerie</small></h2>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-2 col-sm-3 col-lg-2">
         <div class="btn-group-vertical" role="group" aria-label="...">
             <?php foreach($connected as $profil){?>
             <a href="<?= $this->base_url()?>messagerie/index?t=<?=$profil['id']?>" type="button" class="btn btn-default"><?= $profil['prenom'].' '.$profil['nom']?></a>
             <?php }?>
         </div>
     </div>
-    <div class="col-md-8">
+    <?php if(isset($chat)){ ?>
+    <div class="col-md-8 col-sm-9 col-lg-6">
         <div id="chat">
-            <?php foreach ($chat AS $msg){ ?>
-                <p><?= $msg['date'].' '.$msg['message']?></p>
-            <?php } ?>
+            <?php foreach ($chat AS $msg){
+                if($msg['from_id'] == $_SESSION['user']['id']){
+                    echo '<p class="text-left">'.$msg['message'].'</p>';
+                }
+                else
+                    echo '<p class="text-right">'.$msg['message'].'</p>';
+                }
+            ?>
         </div>
+        <form method="post" action="<?= $this->base_url()?>messagerie/send_msg">
+            <input type="text" name="msg" class="form-control">
+            <button type="submit" name="to" value="<?= $_GET['t']?>" class="btn btn-default">Envoyer</button>
+        </form>
     </div>
+    <?php } ?>
 </div>
 <script type="text/javascript">
     function $_GET(param) {

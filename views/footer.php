@@ -12,15 +12,18 @@
     window.onload = function(){
         setInterval(function(){
             $.post("<?= $this->base_url()?>welcome/notification", {}, function(data){
-                if (data == 1)
-                {
-                    $('#notif_icon').removeClass('hidden');
-                    $('#notif_icon2').removeClass('hidden');
+                if (data == 1) {
+                    $('#notif').removeClass('hidden');
+                    $('#notif_bord').removeClass('hidden');
                 }
-                else
-                {
-                    $('#notif_icon').addClass('hidden');
-                    $('#notif_icon2').addClass('hidden');
+                else if(data == 2) {
+                    $('#notif').removeClass('hidden');
+                    $('#notif_msg').removeClass('hidden');
+                }
+                else {
+                    $('#notif').addClass('hidden');
+                    $('#notif_msg').addClass('hidden');
+                    $('#notif_bord').addClass('hidden');
                 }
             });
         },1000);}

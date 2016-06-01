@@ -23,7 +23,7 @@ class User extends VK_Controller {
         }
         $profil['profil']['tag'] = $tag;
         $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
-        $this->notification_model->add_notification($pid);
+        $this->notification_model->add_notification($pid, 1);
         $this->set($profil);
         $this->views('user/profil');
     }
@@ -37,7 +37,7 @@ class User extends VK_Controller {
         $data['likes'] = $likes;
         $data['visits'] = $visits;
         $_SESSION['notif'] = FALSE;
-        $this->notification_model->rm_notification($uid);
+        $this->notification_model->rm_notification($uid, 1);
         $this->set($data);
         $this->views('user/dashbord');
     }
@@ -48,7 +48,8 @@ class User extends VK_Controller {
             exit;
         }
         else {
-            $this->user_model->edit_description($_SESSION['user']['id'], $_POST['description']);
+            $description = htmlspecialchars(addslashes($_POST['description']));
+            $this->user_model->edit_description($_SESSION['user']['id'], $description);
             $this->set(array('info' => 'Geute'));
             header('Location: my_profil');
             exit;

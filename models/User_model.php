@@ -58,7 +58,8 @@ class User_model extends VK_Model {
                   FROM `visit` AS v
                   LEFT JOIN `user` AS u
                   ON v.user_visited = u.id
-                  WHERE u.id = $id";
+                  WHERE u.id = $id
+                  ORDER BY `date` DESC";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
 }

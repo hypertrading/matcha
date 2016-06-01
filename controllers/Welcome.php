@@ -26,15 +26,26 @@ class Welcome extends VK_Controller{
     }
     function notification(){
         $uid = $_SESSION['user']['id'];
-        if($this->notification_model->as_notification($uid) >= 1){
-            $_SESSION['notif'] = TRUE;
-            echo 1;
+        $notifs = $this->notification_model->as_notification($uid);
+        if(count($notifs) >= 1){
+            foreach($notifs AS $notif){
+                if($notif['type'] == 1){
+                    $_SESSION['notif_like'] = TRUE;
+                    echo 1;
+                }
+                else if ($notif['type'] == 2){
+                    $_SESSION['notif_msg'] = TRUE;
+                    echo 2;
+                }
+            }
+            $_SESSION['notif'] = 1;
         }
         else {
             $_SESSION['notif'] = FALSE;
+            $_SESSION['notif_like'] = FALSE;
+            $_SESSION['notif_msg'] = FALSE;
             echo 0;
         }
-        exit;
     }
 }
 ?>
