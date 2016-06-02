@@ -52,23 +52,15 @@ class Match extends VK_Controller {
             $visit = $this->user_model->already_visit($pid, $uid) ? 2 : 0;
             $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
             $img = $this->picture_model->get_user_pict($pid);
+            $this->array_sort_by_column($img, 'avatar');
             $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
             $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
             $profil['score'] = $occurencetag + $visit + $like_me;
 
             //echo $profil['nom'].' '.$profil['score'].'<br>';
-
         }
 
-        //ordonne les profils pour afficher les meilleurs en premiers
-        function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
-            $sort_col = array();
-            foreach ($arr as $key=> $row) {
-                $sort_col[$key] = $row[$col];
-            }
-            array_multisort($sort_col, $dir, $arr);
-        }
-        array_sort_by_column($profils, 'score');
+        $this->array_sort_by_column($profils, 'score');
         $data['profils'] = $profils;
         $this->set($data);
         $this->views('decouverte');

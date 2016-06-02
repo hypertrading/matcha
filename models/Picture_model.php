@@ -1,8 +1,8 @@
 <?php
 include_once 'core/VK_Model.php';
 class Picture_model extends VK_Model {
-    function add_picture($uid){
-        $query = "INSERT INTO `user_picture` (`user_id`) VALUES ($uid)";
+    function add_picture($uid, $avatar){
+        $query = "INSERT INTO `user_picture` (`user_id`, `avatar`) VALUES ($uid, $avatar)";
         $this->db->query($query);
         $last_id = $this->db->lastInsertId();
         return $last_id;
@@ -23,6 +23,12 @@ class Picture_model extends VK_Model {
     }
     function set_avatar($id){
         $query = "UPDATE `user_picture` SET `avatar` = 1 WHERE `id` = $id";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
+    function unset_avatar($id){
+        $query = "UPDATE `user_picture` SET `avatar` = 0 WHERE `id` = $id";
         if($this->db->exec($query))
             return TRUE;
         return FALSE;

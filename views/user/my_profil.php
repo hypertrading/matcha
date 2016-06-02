@@ -30,7 +30,7 @@ include 'views/header.php';
             <div class="img-thumbnail img-block">
                 <img src="<?= $this->base_url().$images[$i]['path']?>" class=" other-pics">
                 <a href="<?= $this->base_url().'user/rm_picture?t='.$images[$i]['id']?>" class="img-rm"><i class='glyphicon glyphicon-trash'></i></a>
-                <a href="#" class="img-set-profil"><i class='glyphicon glyphicon-star'></i></a>
+                <a href="<?= $this->base_url().'user/set_avatar?t='.$images[$i]['id']?>" class="img-set-profil"><i class='glyphicon glyphicon-star'></i></a>
             </div>
         <?php } ?>
     </div>

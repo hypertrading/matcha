@@ -9,6 +9,7 @@ class User extends VK_Controller {
         $id = $_SESSION['user']['id'];
         $user = $this->user_model->get_profil($id);
         $img = $this->picture_model->get_user_pict($id);
+        $this->array_sort_by_column($img, 'avatar');
         for ($i = 0; isset($img[$i]); $i++){
             $user['images'][$i]['path'] = 'assets/img/user_photo/'.$img[$i]['id'].'.jpg';
             $user['images'][$i]['id'] = $img[$i]['id'];
@@ -36,6 +37,7 @@ class User extends VK_Controller {
         $profil['profil'] = $this->user_model->get_profil($pid);
         $tag = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($pid);
+        $this->array_sort_by_column($img, 'avatar');
         for ($i = 0; isset($img[$i]); $i++){
             $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i]['id'].'.jpg';
         }
@@ -77,18 +79,36 @@ class User extends VK_Controller {
         }
     }
     function add_picture() {
+        $uid = $_SESSION['user']['id'];
         $data = $_FILES['picture']['tmp_name'];
         $sizetmp = getimagesize($data);
         $tmp_image = imagecreatefromjpeg($data);
         $image = imagecreatetruecolor($sizetmp[0], $sizetmp[1]);
         imagecopyresampled($image, $tmp_image, 0, 0, 0, 0, $sizetmp[0], $sizetmp[1], $sizetmp[0], $sizetmp[1]);
-        $pid = $this->picture_model->add_picture($_SESSION['user']['id']);
+        $picts = $this->picture_model->get_user_pict($uid);
+        if(!isset($picts[0]))
+            $pid = $this->picture_model->add_picture($uid, 1);
+        else
+            $pid = $this->picture_model->add_picture($uid, 0);
         $path = 'assets/img/user_photo/'.$pid.'.jpg';
         imagejpeg($image, $path);
         unset($_FILES['picture']);
         $this->set(array('info' => 'Geute'));
         header('Location: my_profil');
         exit;
+    }
+    function set_avatar($id){
+        $uid = $_SESSION['user']['id'];
+        $picts = $this->picture_model->get_user_pict($uid);
+        for($i = 0; $picts[$i]; $i++) {
+            if($picts[$i]['avatar'] == 1) {
+                $this->picture_model->unset_avatar($picts[$i]['id']);
+                break;
+            }
+        }
+        $this->picture_model->set_avatar($id);
+        $this->profil($uid);
+
     }
     function rm_picture($id) {
         $uid = $_SESSION['user']['id'];
@@ -118,7 +138,6 @@ class User extends VK_Controller {
             }
         }
         $this->profil($uid);
-
     }
     function add_tag() {
         if (preg_match("/[A-Za-z0-9 '_àâêèéùûôç-]/", $_POST['tag']) != 1 ) {
