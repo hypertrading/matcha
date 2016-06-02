@@ -1,11 +1,17 @@
 <?php
 class User extends VK_Controller {
     function my_profil(){
+        if(!isset($_SESSION['user'])){
+            $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
+            header('Location: '.$this->base_url());
+            exit;
+        }
         $id = $_SESSION['user']['id'];
         $user = $this->user_model->get_profil($id);
         $img = $this->picture_model->get_user_pict($id);
         for ($i = 0; isset($img[$i]); $i++){
-            $user['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
+            $user['images'][$i]['path'] = 'assets/img/user_photo/'.$img[$i]['id'].'.jpg';
+            $user['images'][$i]['id'] = $img[$i]['id'];
         }
         $tag = $this->tag_model->get_tag($user['id']);
         $user['tag'] = $tag;
@@ -31,7 +37,7 @@ class User extends VK_Controller {
         $tag = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($pid);
         for ($i = 0; isset($img[$i]); $i++){
-            $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
+            $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i]['id'].'.jpg';
         }
         if($this->user_model->is_online($pid)[0] == 1)
             $profil['profil']['date_last_login'] = '<span class="online"></span> En ligne';
@@ -83,6 +89,36 @@ class User extends VK_Controller {
         $this->set(array('info' => 'Geute'));
         header('Location: my_profil');
         exit;
+    }
+    function rm_picture($id) {
+        $uid = $_SESSION['user']['id'];
+        $pict = $this->picture_model->get_one_pict($id);
+        if($pict['avatar'] == 0) {
+            $this->picture_model->rm_pict($id);
+            $path = 'assets/img/user_photo/'.$id.'.jpg';
+            unlink($path);
+        }
+        else {
+            $picts = $this->picture_model->get_user_pict($uid);
+            if(isset($picts[1])) {
+                $this->picture_model->rm_pict($id);
+                $path = 'assets/img/user_photo/'.$id.'.jpg';
+                unlink($path);
+                for($i = 0; $picts[$i]; $i++) {
+                    if($picts[$i]['id'] != $id) {
+                        $this->picture_model->set_avatar($picts[$i]['id']);
+                        break;
+                    }
+                }
+            }
+            else {
+                $this->picture_model->rm_pict($id);
+                $path = 'assets/img/user_photo/'.$id.'.jpg';
+                unlink($path);
+            }
+        }
+        $this->profil($uid);
+
     }
     function add_tag() {
         if (preg_match("/[A-Za-z0-9 '_àâêèéùûôç-]/", $_POST['tag']) != 1 ) {

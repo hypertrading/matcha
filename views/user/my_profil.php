@@ -18,13 +18,20 @@ include 'views/header.php';
             <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail">
         <?php }
             else {?>
-            <img src="<?= $this->base_url().$images[0]?>" class="img-thumbnail photo_profil">
+            <div class="img-thumbnail img-block">
+                <img src="<?= $this->base_url().$images[0]['path']?>" class="photo_profil">
+                <a href="<?= $this->base_url().'user/rm_picture?t='.$images[0]['id']?>" class="img-rm"><i class='glyphicon glyphicon-trash'></i></a>
+            </div>
         <?php }?>
         <button data-toggle="modal" data-target=".edit_avatar" class="btn">Ajouter une photo</button>
     </div>
     <div class="col-md-9 col-sm-9 col-xs-8">
-        <?php for($i = 1; isset($images[$i]); $i++){ ?>
-            <img src="<?= $this->base_url().$images[$i]?>" class="img-thumbnail other-pics">
+        <?php for($i = 1; isset($images[$i]); $i++){?>
+            <div class="img-thumbnail img-block">
+                <img src="<?= $this->base_url().$images[$i]['path']?>" class=" other-pics">
+                <a href="<?= $this->base_url().'user/rm_picture?t='.$images[$i]['id']?>" class="img-rm"><i class='glyphicon glyphicon-trash'></i></a>
+                <a href="#" class="img-set-profil"><i class='glyphicon glyphicon-star'></i></a>
+            </div>
         <?php } ?>
     </div>
     </div>

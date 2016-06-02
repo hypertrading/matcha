@@ -64,6 +64,22 @@ a{
     background-color: green;
     display: inline-block;
 }
+.img-block{
+    position: relative;
+}
+.img-rm{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color : deepskyblue;
+}
+.img-set-profil{
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    color : deepskyblue;
+}
+
 
 /**
 ====                            Header

@@ -49,7 +49,8 @@ include 'header.php';
                 var chat = JSON.parse(data);
                 for (const message of chat){
                     var para = document.createElement("p");
-                    var node = document.createTextNode(message['date']+' '+message['message']);
+                    para.className = 'text-right';
+                    var node = document.createTextNode(message['message']);
                     para.appendChild(node);
                     var element = document.getElementById("chat");
                     element.appendChild(para);
