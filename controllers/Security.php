@@ -30,6 +30,7 @@ class Security extends VK_Controller {
                     if ($user['droits'] == 1)
                         $_SESSION['admin'] = 1;
                     $this->user_model->update_last_login($user['id']);
+                    $this->ping();
                     header('Location: ../welcome/index');
                 }
                 else {
@@ -129,13 +130,13 @@ class Security extends VK_Controller {
         }
         $binary_token = base64_decode(str_pad(strtr($token, '-_', '+/'), strlen($token) % 4, '=', STR_PAD_RIGHT));
         if (!$binary_token) {
-            $this->set(array('info' => 'Le token n\'est pas valide 1'));
+            $this->set(array('info' => 'Le token n\'est pas valide'));
             $this->views('security/connexion');
             exit;
         }
         $data = @unpack('Iid/Sentropy', $binary_token);
         if (!$data) {
-            $this->set(array('info' => 'Le token n\'est pas valide 2'));
+            $this->set(array('info' => 'Le token n\'est pas valide'));
             $this->views('security/connexion');
             exit;
         }
@@ -151,9 +152,10 @@ class Security extends VK_Controller {
         }
     }
     function logout(){
+        $this->user_model->set_offline($_SESSION['user']['id']);
         unset($_SESSION['user']);
-        $this->set(array('info' => 'A bientot !'));
         header('Location: ../welcome/index');
+        exit;
     }
 
 }

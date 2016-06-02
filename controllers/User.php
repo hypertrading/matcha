@@ -13,7 +13,16 @@ class User extends VK_Controller {
         $this->views('user/my_profil');
     }
     function profil($pid){
+        if(!isset($_SESSION['user'])){
+            $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
+            header('Location: '.$this->base_url());
+            exit;
+        }
         $uid = $_SESSION['user']['id'];
+        if($pid == $uid){
+            header('Location: '.$this->base_url().'user/my_profil');
+            exit;
+        }
         if(!$this->user_model->already_visit($uid, $pid)){
             $this->user_model->log_visit($uid, $pid);
             $this->notification_model->add_notification($pid, 1);
@@ -24,6 +33,10 @@ class User extends VK_Controller {
         for ($i = 0; isset($img[$i]); $i++){
             $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i].'.jpg';
         }
+        if($this->user_model->is_online($pid)[0] == 1)
+            $profil['profil']['date_last_login'] = '<span class="online"></span> En ligne';
+        else
+            $profil['profil']['date_last_login'] = $this->get_the_day($profil['profil']['date_last_login']);
         $profil['profil']['tag'] = $tag;
         $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
         $this->set($profil);

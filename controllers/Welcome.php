@@ -47,5 +47,9 @@ class Welcome extends VK_Controller{
             echo 0;
         }
     }
+    function ping(){
+        $uid = $_SESSION['user']['id'];
+        echo $this->user_model->user_ping($uid);
+    }
 }
 ?>

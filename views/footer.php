@@ -26,7 +26,11 @@
                     $('#notif_bord').addClass('hidden');
                 }
             });
-        },1000);}
+        },1000);
+        setInterval(function(){
+            $.post("<?= $this->base_url()?>welcome/ping", {}, function(data){});
+        },2000);
+    }
 </script>
 </body>
 </html>

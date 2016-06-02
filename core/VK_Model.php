@@ -12,5 +12,12 @@ class VK_Model {
             die('PDO Erreur : '.$e->getMessage());
         }
     }
+    function clean_log(){
+        $query = "DELETE FROM `user_log` WHERE `date_last_activity` < DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
+
 }
 ?>
