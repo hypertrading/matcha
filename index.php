@@ -1,5 +1,5 @@
 <?php
-define ('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
+//define ('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 define ('ROOT',str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 session_start();
 require_once (ROOT.'core/VK_Controller.php');

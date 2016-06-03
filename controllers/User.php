@@ -47,10 +47,18 @@ class User extends VK_Controller {
             $profil['profil']['date_last_login'] = $this->get_the_day($profil['profil']['date_last_login']);
         $profil['profil']['tag'] = $tag;
         $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
+        $profil['connected'] = FALSE;
+        if($profil['like'])
+            $profil['connected'] = $this->like_model->is_like($pid, $uid) ? TRUE : FALSE;
         $this->set($profil);
         $this->views('user/profil');
     }
     function dashbord(){
+        if(!isset($_SESSION['user'])){
+            $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
+            header('Location: '.$this->base_url());
+            exit;
+        }
         $uid = $_SESSION['user']['id'];
         $visits = $this->user_model->get_visit($uid);
         foreach($visits AS &$visit){
