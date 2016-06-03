@@ -3,8 +3,7 @@ if(!isset($_SESSION['user'])) {
     $this->set(array('info' => 'Vous n\'avez pas accés à cet page. Connecter vous.'));
     $this->views('home');
 }
-include 'views/header.php';
-?>
+include 'views/header.php'; ?>
 
 <div class="row">
     <div class="col-md-12">
@@ -16,8 +15,7 @@ include 'views/header.php';
     <div class="col-md-3 col-sm-3 col-xs-8">
         <?php if(!isset($images[0])){ ?>
             <img src="<?= $this->base_url()?>assets/img/user_photo/defaultprofil.gif" class="img-thumbnail">
-        <?php }
-            else {?>
+        <?php } else {?>
             <div class="img-thumbnail img-block">
                 <img src="<?= $this->base_url().$images[0]['path']?>" class="photo_profil">
                 <a href="<?= $this->base_url().'user/rm_picture?t='.$images[0]['id']?>" class="img-rm"><i class='glyphicon glyphicon-trash'></i></a>
@@ -34,7 +32,7 @@ include 'views/header.php';
             </div>
         <?php } ?>
     </div>
-    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <h4>Description</h4>
@@ -118,28 +116,28 @@ include 'views/header.php';
                 </div>
                 <div class="modal-body">
                     <form method="post">
-                    <label>Pseudo :</label>
-                    <input name="pseudo"  value="<?= $pseudo?>" type="text" class="form-control input-sm" placeholder="Pseudo">
-                    <label>Nom :</label>
-                    <input name="nom"  value="<?= $_SESSION['user']['nom'] ?>" type="text" class="form-control input-sm" placeholder="Nom">
-                    <label>Prénom :</label>
-                    <input name="prenom" value="<?= $_SESSION['user']['prenom'] ?>" type="text" class="form-control input-sm" placeholder="Prénom">
-                    <label>Email :</label>
-                    <input name="email"  value="<?= $_SESSION['user']['email'] ?>" type="email" class="form-control input-sm" placeholder="Adresse Mail">
-                    <label>Date de naissance:</label>
-                    <input name="date_naissance"  value="<?= $_SESSION['user']['date_naissance'] ?>" class="form-control input-sm" type="date">
-                    <div class="radio no_line_height">
-                        <label class="radio-inline">
-                            <input name="sexe" type="radio" id= "inlineRadio1" value="1" <?php if($_SESSION['user']['sexe'] == 1){echo "checked";} ;?>>
-                            Homme
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label class="radio-inline">
-                            <input name="sexe" type="radio" id="inlineRadio2" value="2" <?php if($_SESSION['user']['sexe'] == 2){echo "checked";} ;?>>
-                            Femme
-                        </label>
-                    </div>
+                        <label>Pseudo :</label>
+                        <input name="pseudo"  value="<?= $pseudo?>" type="text" class="form-control input-sm" placeholder="Pseudo">
+                        <label>Nom :</label>
+                        <input name="nom"  value="<?= $_SESSION['user']['nom'] ?>" type="text" class="form-control input-sm" placeholder="Nom">
+                        <label>Prénom :</label>
+                        <input name="prenom" value="<?= $_SESSION['user']['prenom'] ?>" type="text" class="form-control input-sm" placeholder="Prénom">
+                        <label>Email :</label>
+                        <input name="email"  value="<?= $_SESSION['user']['email'] ?>" type="email" class="form-control input-sm" placeholder="Adresse Mail">
+                        <label>Date de naissance:</label>
+                        <input name="date_naissance"  value="<?= $_SESSION['user']['date_naissance'] ?>" class="form-control input-sm" type="date">
+                        <div class="radio no_line_height">
+                            <label class="radio-inline">
+                                <input name="sexe" type="radio" id= "inlineRadio1" value="1" <?php if($_SESSION['user']['sexe'] == 1){echo "checked";} ;?>>
+                                Homme
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input name="sexe" type="radio" id="inlineRadio2" value="2" <?php if($_SESSION['user']['sexe'] == 2){echo "checked";} ;?>>
+                                Femme
+                            </label>
+                        </div>
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 0){echo 'active';}?>">
                                 <input type="radio" name="orientation" id="orientation1" value="0" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 0){echo 'checked';}?>> Bisexuel
@@ -151,6 +149,7 @@ include 'views/header.php';
                                 <input type="radio" name="orientation" id="orientation3" value="2" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 2){echo 'checked';}?>> Homosexuel
                             </label>
                         </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <div class="col-md-12 valider">

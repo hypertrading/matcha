@@ -1,4 +1,9 @@
-<?php include 'views/header.php'; ?>
+<?php
+if(!isset($_SESSION['user'])) {
+    $this->set(array('info' => 'Vous n\'avez pas accés à cet page. Connecter vous.'));
+    $this->views('home');
+}
+include 'views/header.php'; ?>
 <div class="row">
     <div class="col-md-12">
         <h2>
@@ -15,6 +20,8 @@
                 <i class="glyphicon glyphicon-envelope"></i>
             </a>
         <?php }?>
+            <button class="btn btn-default"><i class="glyphicon glyphicon-option-horizontal"></i></button>
+
         </h2>
         <p>Dernière connexion : <?=$profil['date_last_login']?></p>
     </div>
@@ -38,6 +45,12 @@
         <h4>Description</h4>
         <p>
             <?=$profil['description']?>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <h4>info</h4>
+        <p>
+            <?=$profil['age'].' ans'?>
         </p>
     </div>
 </div>

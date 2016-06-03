@@ -20,13 +20,13 @@ class User extends VK_Controller {
         $this->views('user/my_profil');
     }
     function profil($pid){
-        if(!isset($_SESSION['user'])){
+        if(!isset($_SESSION['user'])) {
             $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
             header('Location: '.$this->base_url());
             exit;
         }
         $uid = $_SESSION['user']['id'];
-        if($pid == $uid){
+        if($pid == $uid) {
             header('Location: '.$this->base_url().'user/my_profil');
             exit;
         }
@@ -35,21 +35,21 @@ class User extends VK_Controller {
             $this->notification_model->add_notification($pid, 1);
         }
         $profil['profil'] = $this->user_model->get_profil($pid);
-        $tag = $this->tag_model->get_tag($profil['profil']['id']);
+        $profil['profil']['tag'] = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($pid);
         $this->array_sort_by_column($img, 'avatar');
-        for ($i = 0; isset($img[$i]); $i++){
+        for ($i = 0; isset($img[$i]); $i++) {
             $profil['images'][$i] = 'assets/img/user_photo/'.$img[$i]['id'].'.jpg';
         }
         if($this->user_model->is_online($pid)[0] == 1)
             $profil['profil']['date_last_login'] = '<span class="online"></span> En ligne';
         else
             $profil['profil']['date_last_login'] = $this->get_the_day($profil['profil']['date_last_login']);
-        $profil['profil']['tag'] = $tag;
         $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
         $profil['connected'] = FALSE;
         if($profil['like'])
             $profil['connected'] = $this->like_model->is_like($pid, $uid) ? TRUE : FALSE;
+        $profil['profil']['age'] = round ((time() - strtotime($profil['profil']['date_naissance'])) / 3600 / 24 / 365);
         $this->set($profil);
         $this->views('user/profil');
     }
