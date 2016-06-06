@@ -57,7 +57,7 @@ include 'views/header.php'; ?>
     <div class="col-md-6">
         <h4>info</h4>
         <p><?=$profil['age']?> ans</p>
-        <p>Localisation : <?=$profil['localisation']?></p>
+        <p>Localisation : <?=$profil['localisation'].' ('.$distance.' kms)'?></p>
     </div>
 </div>
 

@@ -52,7 +52,9 @@ class Security extends VK_Controller {
             'email' => $_POST['email'],
             'date_naissance' => $_POST['date_naissance'],
             'password' => $_POST['password'],
-            'sexe' => $_POST['sexe']);
+            'sexe' => $_POST['sexe'],
+            'localisation' => $this->geoloc->get_place_id());
+        $this->array_debug($inputs);
 
         if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['pseudo']) != 1 ) {
             $this->set(array('info' => 'Le champ speudo n\'est pas conforme.'));
@@ -70,7 +72,7 @@ class Security extends VK_Controller {
             $this->set(array('info' => 'Le champ email n\'est pas conforme.'));
             $this->views('security/register');
         }
-        else if (preg_match("/^(19|20)([0-9](2))[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/", $inputs['date_naissance']) !== 1) {
+        else if (preg_match("/^(19|20)([0-9](2))[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/", $inputs['date_naissance']) != 1) {
             $this->set(array('info' => 'Le champ date de naissance n\'est pas conforme.'));
             $this->views('security/register');
         }
@@ -121,8 +123,7 @@ class Security extends VK_Controller {
             $this->views('security/register');
         }
     }
-    function valid_acount($token)
-    {
+    function valid_acount($token) {
         if (!$token) {
             $this->set(array('info' => 'Le lien n\'est pas valide'));
             $this->views('security/connexion');
@@ -140,8 +141,7 @@ class Security extends VK_Controller {
             $this->views('security/connexion');
             exit;
         }
-        if($this->security_model->token_match($token))
-        {
+        if ($this->security_model->token_match($token)) {
             if($this->security_model->valid_acount($data['id']))
             {
                 $this->security_model->rm_token($token);
@@ -157,6 +157,5 @@ class Security extends VK_Controller {
         header('Location: ../welcome/index');
         exit;
     }
-
 }
 ?>

@@ -36,7 +36,12 @@ class User extends VK_Controller {
             $this->notification_model->add_notification($pid, 1);
         }
         $profil['profil'] = $this->user_model->get_profil($pid);
+
+        $mypos = $this->geoloc->get_place_id($_SESSION['user']['localisation']);
+        $distance = round($this->geoloc->get_distance_m($profil['profil']['localisation'], $mypos) / 1000, 2);
+        $profil['distance'] = $distance;
         $profil['profil']['localisation'] = $this->geoloc->get_city_by_placeid($profil['profil']['localisation']);
+
         $profil['profil']['tag'] = $this->tag_model->get_tag($profil['profil']['id']);
         $img = $this->picture_model->get_user_pict($pid);
         $this->array_sort_by_column($img, 'avatar');

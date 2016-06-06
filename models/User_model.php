@@ -2,7 +2,7 @@
 include_once 'core/VK_Model.php';
 class User_model extends VK_Model {
     function get_one_user($pseudo){
-        $query = "SELECT id, pseudo, nom, prenom, password, email, sexe, orientation, date_naissance, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
+        $query = "SELECT id, pseudo, nom, prenom, password, email, sexe, orientation, localisation, date_naissance, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
         if($result = $this->db->query($query))
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
@@ -12,8 +12,8 @@ class User_model extends VK_Model {
         $password = hash('whirlpool', $password);
         $date_register = date("Y-m-d H:i:s");
         $query = "INSERT INTO `user`
-                  (`nom`, `prenom`, `pseudo`, `email`, `date_naissance`, `password`, `sexe`, `date_register`)
-                  VALUES ('$nom', '$prenom', '$pseudo', '$email', '$date_naissance', '$password', '$sexe', '$date_register')";
+                  (`nom`, `prenom`, `pseudo`, `email`, `date_naissance`, `password`, `sexe`, `localisation`, `date_register`)
+                  VALUES ('$nom', '$prenom', '$pseudo', '$email', '$date_naissance', '$password', '$sexe', '$localisation', '$date_register')";
         if($this->db->exec($query))
             return TRUE;
         return FALSE;
@@ -40,7 +40,7 @@ class User_model extends VK_Model {
         return FALSE;
     }
     function get_profils_for($uid, $sexe, $orientation){
-        $query = "SELECT id, prenom, nom, date_naissance
+        $query = "SELECT id, prenom, nom, date_naissance, localisation
                   FROM `user`
                   WHERE status = 1
                   AND id <> $uid
