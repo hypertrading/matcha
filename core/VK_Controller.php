@@ -16,7 +16,17 @@ class VK_Controller {
         $this->messagerie_model = new Messagerie_model();
         $this->clean_user_log();
     }
-     function set($data) {
+    function __destruct()
+    {
+        unset($vars);
+        $vars = get_object_vars($this);
+        foreach($vars as $key => $val)
+        {
+            $this->$key = null;
+        }
+    }
+
+    function set($data) {
          $this->vars = array_merge($this->vars, $data);
      }
     function views($filename){

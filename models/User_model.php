@@ -86,5 +86,15 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
+    function report($pid, $uid, $type){
+        $query = "INSERT INTO `user_report` (`user_reported`, `user_report`, `type`) VALUES ($pid, $uid, $type)";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
+    function is_report($uid, $pid){
+        $query = "SELECT COUNT(*) FROM `user_report` WHERE `user_report` = $uid AND `user_reported` = $pid";
+        return $this->db->query($query)->fetch();
+    }
 }
 ?>

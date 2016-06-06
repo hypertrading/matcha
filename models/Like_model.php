@@ -5,8 +5,8 @@ class Like_model extends VK_Model {
         $query = "INSERT INTO `likes` (`user_like`, `user_liked`) VALUES ($id, $user_liked)";
         $this->db->query($query);
     }
-    function unlike($id, $user_liked){
-        $query = "DELETE FROM `likes` WHERE `user_like` = $id AND `user_liked` = $user_liked";
+    function unlike($id, $user_unliked){
+        $query = "DELETE FROM `likes` WHERE `user_like` = $id AND `user_liked` = $user_unliked";
         $this->db->exec($query);
     }
     function is_like($uid, $pid){

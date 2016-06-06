@@ -19,10 +19,14 @@ if(file_exists(ROOT.'controllers/'.$controller.'.php')){
    $controller = new $controller();
    if (method_exists($controller, $action)) {
       if(isset($_GET['t']))
-         $controller->$action($_GET['t']);
+         if(isset($_GET['v']))
+            $controller->$action($_GET['t'], $_GET['v']);
+         else
+            $controller->$action($_GET['t']);
       else
          $controller->$action();
-   } else {
+   }
+   else {
       require_once 'controllers/Welcome.php';
       $welcome = new Welcome();
       $welcome->page_not_found();

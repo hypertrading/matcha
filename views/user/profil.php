@@ -20,7 +20,14 @@ include 'views/header.php'; ?>
                 <i class="glyphicon glyphicon-envelope"></i>
             </a>
         <?php }?>
-            <button class="btn btn-default"><i class="glyphicon glyphicon-option-horizontal"></i></button>
+
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-option-horizontal"></i></button>
+                <ul class="dropdown-menu">
+                    <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=2'?>">C'est un faux compte</a></li>
+                    <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=1'?>">Bloquer cette utilisateur</a></li>
+                </ul>
+            </div>
 
         </h2>
         <p>Dernière connexion : <?=$profil['date_last_login']?></p>

@@ -38,27 +38,31 @@ class Match extends VK_Controller {
         //Pour chaque profil, calcule le score de match et ajoute des infos (img, like)
         foreach ($profils as &$profil) {
             $pid = $profil['id'];
-            $occurencetag = 0;
-
-            $ptag = $this->tag_model->get_tag($pid);
-            $mytag = $this->tag_model->get_tag($uid);
-            foreach ($mytag as $key => $tmptag) {
-                foreach ($ptag as $key2 => $tmptag2) {
-                    if ($tmptag['nom'] == $tmptag2['nom']) {
-                        $occurencetag++;
+            if($this->user_model->is_report($uid, $pid)[0] > 0){
+                $profil = NULL;
+            }
+            else {
+                $occurencetag = 0;
+                $ptag = $this->tag_model->get_tag($pid);
+                $mytag = $this->tag_model->get_tag($uid);
+                foreach ($mytag as $key => $tmptag) {
+                    foreach ($ptag as $key2 => $tmptag2) {
+                        if ($tmptag['nom'] == $tmptag2['nom']) {
+                            $occurencetag++;
+                        }
                     }
                 }
-            }
-            $visit = $this->user_model->already_visit($pid, $uid) ? 2 : 0;
-            $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
-            $img = $this->picture_model->get_user_pict($pid);
-            $this->array_sort_by_column($img, 'avatar');
-            $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
-            $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
-            $profil['score'] = $occurencetag + $visit + $like_me;
-
+                $visit = $this->user_model->already_visit($pid, $uid) ? 2 : 0;
+                $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
+                $img = $this->picture_model->get_user_pict($pid);
+                $this->array_sort_by_column($img, 'avatar');
+                $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
+                $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
+                $profil['score'] = $occurencetag + $visit + $like_me;
+                }
             //echo $profil['nom'].' '.$profil['score'].'<br>';
         }
+        $profils = array_filter($profils);
 
         $this->array_sort_by_column($profils, 'score');
         $data['profils'] = $profils;

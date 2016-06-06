@@ -20,7 +20,7 @@ class User extends VK_Controller {
         $this->views('user/my_profil');
     }
     function profil($pid){
-        if(!isset($_SESSION['user'])) {
+        if(!isset($_SESSION['user']) || $this->user_model->is_report($_SESSION['user']['id'], $pid)[0] > 0) {
             $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
             header('Location: '.$this->base_url());
             exit;
@@ -175,4 +175,18 @@ class User extends VK_Controller {
         header('Location: my_profil');
         exit;
     }
+    function report($pid, $type){
+        $uid = $_SESSION['user']['id'];
+        $this->user_model->report($pid, $uid, $type);
+        if($type == 1){
+            $this->like_model->unlike($uid, $pid);
+            header('Location: '.$this->base_url().'match/decouverte');
+            exit;
+        }
+        else if($type == 2){
+            header('Location: '.$this->base_url().'match/decouverte');
+            exit;
+        }
+    }
+
 }
