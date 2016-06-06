@@ -2,7 +2,7 @@
 include_once 'core/VK_Model.php';
 class User_model extends VK_Model {
     function get_one_user($pseudo){
-        $query = "SELECT id, pseudo, nom, email, sexe, orientation, date_naissance, prenom, password, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
+        $query = "SELECT id, pseudo, nom, prenom, password, email, sexe, orientation, date_naissance, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
         if($result = $this->db->query($query))
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
@@ -28,7 +28,7 @@ class User_model extends VK_Model {
         return FALSE;
     }
     function get_profil($id) {
-        $query = "SELECT id, pseudo, nom, prenom, description, date_naissance, date_last_login  FROM `user` WHERE `id` = $id";
+        $query = "SELECT id, pseudo, nom, prenom, description, localisation, date_naissance, date_last_login  FROM `user` WHERE `id` = $id";
         if($result = $this->db->query($query))
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;

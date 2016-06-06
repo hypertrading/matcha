@@ -28,9 +28,9 @@ include 'views/header.php'; ?>
                     <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=1'?>">Bloquer cette utilisateur</a></li>
                 </ul>
             </div>
-
         </h2>
         <p>Dernière connexion : <?=$profil['date_last_login']?></p>
+
     </div>
     <div class="col-md-3">
         <?php if(!isset($images[0]))
@@ -56,9 +56,8 @@ include 'views/header.php'; ?>
     </div>
     <div class="col-md-6">
         <h4>info</h4>
-        <p>
-            <?=$profil['age'].' ans'?>
-        </p>
+        <p><?=$profil['age']?> ans</p>
+        <p>Localisation : <?=$profil['localisation']?></p>
     </div>
 </div>
 

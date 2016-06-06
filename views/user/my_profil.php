@@ -11,6 +11,7 @@ include 'views/header.php'; ?>
             <?= ucfirst($pseudo) ?>
             <small><a href="#" data-toggle="modal" data-target=".edit-profil"><i class="glyphicon glyphicon-edit"></i></a></small>
         </h2>
+        <p>Localisation : <?=$localisation?></p>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-8">
         <?php if(!isset($images[0])){ ?>
@@ -62,8 +63,6 @@ include 'views/header.php'; ?>
         </form>
     </div>
 </div>
-
-
 
 <!-- Ajouter une photo-->
 <div class="modal fade edit_avatar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

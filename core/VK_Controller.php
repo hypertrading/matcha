@@ -43,6 +43,9 @@ class VK_Controller {
     function clean_user_log(){
         $this->user_model->clean_log();
     }
+    function array_debug($array){
+        echo "<pre>".print_r($array,TRUE)."</pre>";
+    }
     function get_the_day($date)
     {
         $datetime1 = new DateTime("now");
@@ -71,6 +74,49 @@ class VK_Controller {
             $sort_col[$key] = $row[$col];
         }
         array_multisort($sort_col, $dir, $arr);
+    }
+    function _get_ip() {
+        $ip = json_decode(file_get_contents('https://api.ipify.org?format=json'))->ip;
+        return $ip;
+    }
+    function _geoloc(){
+        include_once("library/geoloc/geoipcity.inc");
+        include_once("library/geoloc/geoipregionvars.php");
+
+        $gi = geoip_open(realpath("library/geoloc/geolitecity.dat"), GEOIP_STANDARD);
+        $ip = $this->_get_ip();
+        $record = geoip_record_by_addr($gi, $ip);
+        geoip_close($gi);
+        $lat =  $record->latitude;
+        $long = $record->longitude;
+
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$long;
+        if($json = file_get_contents($url)) {
+            $data = json_decode($json, true);
+            return $data['results'][0];
+        }
+        return FALSE;
+    }
+    function geoloc_get_place_id(){
+        return $this->_geoloc()['place_id'];
+    }
+    function geoloc_get_adresse_formatted(){
+        return $this->_geoloc()['formatted_address'];
+    }
+    function geoloc_get_city_by_placeid($place_id){
+        $key_api = 'AIzaSyCNyQ1EdWYofXYBMoMNij3fkEUEak6TGtk';
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?place_id='.$place_id.'&key='.$key_api;
+        if($json = file_get_contents($url)) {
+            $data = json_decode($json, true)['results'][0]['address_components'];
+            foreach($data as $line)
+            {
+                if (in_array("locality", $line["types"])) {
+                    return $line['long_name'];
+                }
+            }
+            $this->array_debug($data);
+        }
+        return FALSE;
     }
 }
 ?>
