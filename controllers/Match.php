@@ -64,12 +64,15 @@ class Match extends VK_Controller {
                 $mylat = $_SESSION['user']['lat'];
                 $mylng = $_SESSION['user']['lng'];
                 $profil['distance'] = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
+                $score_dist = round(20 - $profil['distance'], 0);
+                if($score_dist < 0)
+                    $score_dist = 0;
 
 
                 $profil['age'] = round ((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
 
 
-                $profil['score'] = $occurencetag + $visit + $like_me;
+                $profil['score'] = $occurencetag + $visit + $like_me + $score_dist;
             }
         }
         $profils = array_filter($profils);
