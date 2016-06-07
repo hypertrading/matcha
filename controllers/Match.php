@@ -1,8 +1,7 @@
 <?php
 class Match extends VK_Controller {
-    function decouverte()
-    {
-        if(!isset($_SESSION['user'])){
+    function decouverte() {
+        if(!isset($_SESSION['user'])) {
             $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
             header('Location: '.$this->base_url());
             exit;
@@ -71,7 +70,7 @@ class Match extends VK_Controller {
 
 
                 $profil['score'] = $occurencetag + $visit + $like_me;
-                }
+            }
         }
         $profils = array_filter($profils);
         $this->array_sort_by_column($profils, 'score');

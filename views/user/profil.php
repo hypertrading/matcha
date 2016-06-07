@@ -24,8 +24,8 @@ include 'views/header.php'; ?>
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-option-horizontal"></i></button>
                 <ul class="dropdown-menu">
-                    <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=2'?>">C'est un faux compte</a></li>
                     <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=1'?>">Bloquer cette utilisateur</a></li>
+                    <li><a href="<?= $this->base_url().'user/report?t='.$profil['id'].'&v=2'?>">C'est un faux compte</a></li>
                 </ul>
             </div>
         </h2>

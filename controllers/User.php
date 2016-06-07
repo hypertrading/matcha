@@ -123,7 +123,6 @@ class User extends VK_Controller {
         }
         $this->picture_model->set_avatar($id);
         $this->profil($uid);
-
     }
     function rm_picture($id) {
         $uid = $_SESSION['user']['id'];
@@ -187,10 +186,12 @@ class User extends VK_Controller {
         $this->user_model->report($pid, $uid, $type);
         if($type == 1){
             $this->like_model->unlike($uid, $pid);
+            $this->set(array('info' => "Vous ne verrez plus cet personne."));
             header('Location: '.$this->base_url().'match/decouverte');
             exit;
         }
         else if($type == 2){
+            $this->set(array('info' => "Merci de ce retour, ce cas sera examiné."));
             header('Location: '.$this->base_url().'match/decouverte');
             exit;
         }
@@ -208,9 +209,11 @@ class User extends VK_Controller {
             $_SESSION['user']['localisation'] = $place_id;
             $_SESSION['user']['lat']= $pos['lat'];
             $_SESSION['user']['lng'] = $pos['lng'];
+            $this->set(array('info' => "Votre position à été mise à jour."));
             header('Location: '.$this->base_url().'user/my_profil');
         }
         else{
+            $this->set(array('info' => "Une erreur c'est produite. Retentez ulterieurement."));
             header('Location: '.$this->base_url().'user/my_profil');
         }
     }
@@ -226,7 +229,7 @@ class User extends VK_Controller {
             'orientation' => $_POST['orientation']);
 
         if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['pseudo']) != 1 || !$this->user_model->value_unique('pseudo', $_POST['pseudo'], $uid)) {
-            $this->set(array('info' => 'Le champ pseudo n\'est pas conforme.'));
+            $this->set(array('info' => 'Le champ pseudo n\'est pas conforme ou déjà pris.'));
             header('Location: '.$this->base_url().'user/my_profil');
             exit;
         }

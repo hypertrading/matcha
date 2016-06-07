@@ -16,7 +16,7 @@ class VK_Controller
         $this->like_model = new Like_model();
         $this->notification_model = new Notification_model();
         $this->messagerie_model = new Messagerie_model();
-        $this->clean_user_log();
+        $this->user_model->clean_log();
         $this->geoloc = new Geoloc();
         if(isset($_SESSION['data'])) {
             $this->vars = array_merge($this->vars, $_SESSION['data']);
@@ -40,13 +40,6 @@ class VK_Controller
     }
     function base_url() {
         return 'http://' . $_SERVER['SERVER_NAME'] . '/matcha/';
-    }
-    function ping() {
-        $uid = $_SESSION['user']['id'];
-        $this->user_model->user_ping($uid);
-    }
-    function clean_user_log() {
-        $this->user_model->clean_log();
     }
     function array_debug($array) {
         echo "<pre>" . print_r($array, TRUE) . "</pre>";
@@ -78,8 +71,7 @@ class VK_Controller
         }
         array_multisort($sort_col, $dir, $arr);
     }
-    function valid_date($date, $format = 'Y-m-d')
-    {
+    function valid_date($date, $format = 'Y-m-d') {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;
     }

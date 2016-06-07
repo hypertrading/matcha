@@ -40,6 +40,7 @@ class Messagerie extends VK_Controller {
             exit;
         }
         if (!is_numeric($_POST['to'])){
+            $this->set(array('info' => 'Mais bordel arretez de touchez au code !'));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
         }
