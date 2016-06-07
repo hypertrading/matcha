@@ -6,10 +6,11 @@
                 <h4 class="modal-title">Description</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="post" action="<?= $this->base_url()?>user/edit_position">
                     <div id="locationField">
                         <input class="form-control input-lg" id="autocomplete" placeholder="Enter your address" type="text">
                     </div>
+                    <input id="place_id" name="place_id" value="FALSE">
             </div>
             <div class="modal-footer">
                 <input type="submit" value="Envoyer">

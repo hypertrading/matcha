@@ -195,5 +195,25 @@ class User extends VK_Controller {
             exit;
         }
     }
+    function edit_position(){
+        if(!isset($_SESSION['user'])){
+            $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
+            header('Location: '.$this->base_url());
+            exit;
+        }
+        $uid = $_SESSION['user']['id'];
+        $place_id = $_POST['place_id'];
+        if($pos = $this->geoloc->get_coord_by_place_id($place_id)){
+            $this->user_model->update_position($uid, $pos['lat'], $pos['lng'], $place_id);
+            $_SESSION['user']['localisation'] = $place_id;
+            $_SESSION['user']['lat']= $pos['lat'];
+            $_SESSION['user']['lng'] = $pos['lng'];
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else{
+            echo 'error';
+        }
+
+    }
 
 }

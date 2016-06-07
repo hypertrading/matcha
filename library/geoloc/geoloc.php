@@ -19,7 +19,7 @@ class Geoloc {
         }
         else{
             $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng;
-            if($json = file_get_contents($url)) {
+            if($json = @file_get_contents($url)) {
                 $data = json_decode($json, true);
                 return $data['results'][0];
             }
@@ -29,13 +29,13 @@ class Geoloc {
     private function p_get_gps($place_id){
         $key_api = 'AIzaSyCNyQ1EdWYofXYBMoMNij3fkEUEak6TGtk';
         $url = 'https://maps.googleapis.com/maps/api/geocode/json?place_id='.$place_id.'&key='.$key_api;
-        if($json = file_get_contents($url)) {
+        if($json = @file_get_contents($url)) {
             $data = json_decode($json, true)['results'][0]['geometry']['location'];
             return $data;
         }
         return FALSE;
     }
-    function get_tmpcoord($place_id){
+    function get_coord_by_place_id($place_id){
         return $this->p_get_gps($place_id);
     }
 

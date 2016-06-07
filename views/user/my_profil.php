@@ -82,9 +82,8 @@ include 'views/header.php'; ?>
         autocomplete.addListener('place_changed', fillInAddress);
     }
     function fillInAddress() {
-        // Get the place details from the autocomplete object.
         var place = autocomplete.getPlace();
-        console.log(place.place_id);
+        $("#place_id").val(place.place_id);
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvYkrx4RvWzS38k7SlCSpiYTbcvrcLk5k&signed_in=true&libraries=places&callback=initAutocomplete" async defer>

@@ -110,5 +110,11 @@ class User_model extends VK_Model {
         $query = "SELECT COUNT(*) FROM `user_report` WHERE `user_report` = $uid AND `user_reported` = $pid";
         return $this->db->query($query)->fetch();
     }
+    function update_position($uid, $lat, $lng, $place_id){
+        $query = "UPDATE `user_position` SET `lat` = '$lat', `lng` = '$lng', `place_id` = '$place_id' WHERE `user_id` = $uid";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
 }
 ?>
