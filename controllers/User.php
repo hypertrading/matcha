@@ -211,9 +211,66 @@ class User extends VK_Controller {
             header('Location: '.$this->base_url().'user/my_profil');
         }
         else{
-            echo 'error';
+            header('Location: '.$this->base_url().'user/my_profil');
         }
+    }
+    function edit_profil(){
+        $uid = $_SESSION['user']['id'];
+        $inputs = array(
+            'pseudo' => $_POST['pseudo'],
+            'nom' => $_POST['nom'],
+            'prenom' => $_POST['prenom'],
+            'email' => $_POST['email'],
+            'date_naissance' => $_POST['date_naissance'],
+            'sexe' => $_POST['sexe'],
+            'orientation' => $_POST['orientation']);
 
+        if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['pseudo']) != 1 || !$this->user_model->value_unique('pseudo', $_POST['pseudo'], $uid)) {
+            $this->set(array('info' => 'Le champ pseudo n\'est pas conforme.'));
+            header('Location: '.$this->base_url().'user/my_profil');
+            exit;
+        }
+        else if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['nom']) != 1 ) {
+            $this->set(array('info' => 'Le champ nom n\'est pas conforme.'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['prenom']) != 1) {
+            $this->set(array('info' => 'Le champ prénom n\'est pas conforme.'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == FALSE || !$this->user_model->value_unique('email', $_POST['email'], $uid)) {
+            $this->set(array('info' => 'Le champ email n\'est pas conforme ou déja utilisé.'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else if (!$this->valid_date($inputs['date_naissance'])) {
+            $this->set(array('info' => 'Le champ date de naissance n\'est pas conforme.'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else if ($inputs['sexe'] != 1 && $inputs['sexe'] != 2) {
+            $this->set(array('info' => 'Veullez nous dire si vous etes un homme ou une femme. Ca nous aidera ;)'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else if ($inputs['orientation'] > 2 && $inputs['orientation'] < 0) {
+            $this->set(array('info' => 'Mhhh, arretez de touchez au code svp...'));
+            header('Location: '.$this->base_url().'user/my_profil');
+        }
+        else{
+            if($this->user_model->update_profil($inputs,$uid)){
+                $_SESSION['user']['pseudo'] = $inputs['pseudo'];
+                $_SESSION['user']['nom'] = $inputs['nom'];
+                $_SESSION['user']['prenom'] = $inputs['prenom'];
+                $_SESSION['user']['email'] = $inputs['email'];
+                $_SESSION['user']['sexe'] = $inputs['sexe'];
+                $_SESSION['user']['orientation'] = $inputs['orientation'];
+                $_SESSION['user']['date_naissance'] = $inputs['date_naissance'];
+                $this->set(array('info' => 'Votre profil à bien été mise à jour.'));
+                header('Location: '.$this->base_url().'user/my_profil');
+            }
+            else{
+                $this->set(array('info' => 'Une erreur c\'est produit. Retentez ulterieurement.'));
+                header('Location: '.$this->base_url().'user/my_profil');
+            }
+        }
     }
 
 }

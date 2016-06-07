@@ -69,6 +69,6 @@
         <div class="container">
         <?php if(isset($info)){ ?>
             <div class="alert" role="alert">
-            <p><?= $info ?></p>
-                </div>
+                <p><?= $info ?></p>
+            </div>
         <?php } ?>

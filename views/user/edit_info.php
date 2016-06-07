@@ -6,7 +6,7 @@
                 <h4 class="modal-title">Modifier mes informations</h4>
             </div>
             <div class="modal-body">
-                <form method="post">
+                <form method="post" action="<?= $this->base_url()?>user/edit_profil">
                     <label>Pseudo :</label>
                     <input name="pseudo"  value="<?= $pseudo?>" type="text" class="form-control input-sm" placeholder="Pseudo">
                     <label>Nom :</label>
@@ -40,7 +40,6 @@
                             <input type="radio" name="orientation" id="orientation3" value="2" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 2){echo 'checked';}?>> Homosexuel
                         </label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <div class="col-md-12 valider">

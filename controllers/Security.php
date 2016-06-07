@@ -157,6 +157,7 @@ class Security extends VK_Controller {
     function logout(){
         $this->user_model->set_offline($_SESSION['user']['id']);
         unset($_SESSION['user']);
+        $this->set(array('info' => 'A bientôt !'));
         header('Location: ../welcome/index');
         exit;
     }

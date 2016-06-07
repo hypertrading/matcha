@@ -116,5 +116,26 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
+    function value_unique($champ, $value, $uid){
+        $query = "SELECT COUNT(*) FROM `user` WHERE `$champ` = '$value' AND `id` <> $uid";
+        if($this->db->query($query)->fetchColumn() == 0)
+            return TRUE;
+        return FALSE;
+    }
+    function update_profil($data, $uid){
+        extract($data);
+        $query = "UPDATE `user`
+                  SET `pseudo` = '$pseudo',
+                   `nom` = '$nom',
+                   `prenom` = '$nom',
+                   `email` = '$email',
+                   `orientation` = $orientation,
+                   `sexe` = $sexe,
+                   `date_naissance` = '$date_naissance'
+                   WHERE `id` = $uid";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
 }
 ?>

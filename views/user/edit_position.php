@@ -10,7 +10,7 @@
                     <div id="locationField">
                         <input class="form-control input-lg" id="autocomplete" placeholder="Enter your address" type="text">
                     </div>
-                    <input id="place_id" name="place_id" value="FALSE">
+                    <input id="place_id" name="place_id" value="FALSE" hidden>
             </div>
             <div class="modal-footer">
                 <input type="submit" value="Envoyer">

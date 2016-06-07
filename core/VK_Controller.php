@@ -18,6 +18,10 @@ class VK_Controller
         $this->messagerie_model = new Messagerie_model();
         $this->clean_user_log();
         $this->geoloc = new Geoloc();
+        if(isset($_SESSION['data'])) {
+            $this->vars = array_merge($this->vars, $_SESSION['data']);
+            unset($_SESSION['data']);
+        }
     }
     function __destruct() {
         unset($vars);
@@ -28,6 +32,7 @@ class VK_Controller
     }
     function set($data) {
         $this->vars = array_merge($this->vars, $data);
+        $_SESSION['data'] = $data;
     }
     function views($filename) {
         extract($this->vars);
