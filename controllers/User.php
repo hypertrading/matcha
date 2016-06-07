@@ -221,8 +221,8 @@ class User extends VK_Controller {
         $uid = $_SESSION['user']['id'];
         $inputs = array(
             'pseudo' => $_POST['pseudo'],
-            'nom' => $_POST['nom'],
-            'prenom' => $_POST['prenom'],
+            'nom' => ucfirst(strtolower($_POST['nom'])),
+            'prenom' => ucfirst(strtolower($_POST['prenom'])),
             'email' => $_POST['email'],
             'date_naissance' => $_POST['date_naissance'],
             'sexe' => $_POST['sexe'],

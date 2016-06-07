@@ -127,7 +127,7 @@ class User_model extends VK_Model {
         $query = "UPDATE `user`
                   SET `pseudo` = '$pseudo',
                    `nom` = '$nom',
-                   `prenom` = '$nom',
+                   `prenom` = '$prenom',
                    `email` = '$email',
                    `orientation` = $orientation,
                    `sexe` = $sexe,
