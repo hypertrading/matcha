@@ -2,7 +2,11 @@
 include_once 'core/VK_Model.php';
 class User_model extends VK_Model {
     function get_one_user($pseudo){
-        $query = "SELECT id, pseudo, nom, prenom, password, email, sexe, orientation, localisation, date_naissance, status, droits FROM `user` WHERE `pseudo` = '$pseudo'";
+        $query = "SELECT id, pseudo, nom, prenom, password, email, sexe, orientation, date_naissance, status, droits, u_p.lat, u_p.lng, u_p.place_id as localisation
+                  FROM `user` AS u
+                  LEFt JOIN `user_position` AS u_p
+                  ON u.id = u_p.user_id
+                  WHERE `pseudo` = '$pseudo'";
         if($result = $this->db->query($query))
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
@@ -12,10 +16,14 @@ class User_model extends VK_Model {
         $password = hash('whirlpool', $password);
         $date_register = date("Y-m-d H:i:s");
         $query = "INSERT INTO `user`
-                  (`nom`, `prenom`, `pseudo`, `email`, `date_naissance`, `password`, `sexe`, `localisation`, `date_register`)
-                  VALUES ('$nom', '$prenom', '$pseudo', '$email', '$date_naissance', '$password', '$sexe', '$localisation', '$date_register')";
-        if($this->db->exec($query))
-            return TRUE;
+                  (`nom`, `prenom`, `pseudo`, `email`, `date_naissance`, `password`, `sexe`, `date_register`)
+                  VALUES ('$nom', '$prenom', '$pseudo', '$email', '$date_naissance', '$password', '$sexe', '$date_register')";
+        if($this->db->exec($query)){
+            $last_id = $this->db->lastInsertId();
+            $query = "INSERT INTO `user_position` (`user_id`, `lat`, `lng`, `place_id`) VALUES ('$last_id', '$lat', '$lng', '$localisation')";
+            if($this->db->exec($query))
+                return TRUE;
+        }
         return FALSE;
     }
     function update_last_login($id) {
@@ -28,7 +36,11 @@ class User_model extends VK_Model {
         return FALSE;
     }
     function get_profil($id) {
-        $query = "SELECT id, pseudo, nom, prenom, description, localisation, date_naissance, date_last_login  FROM `user` WHERE `id` = $id";
+        $query = "SELECT id, pseudo, nom, prenom, description, u_p.lat, u_p.lng, u_p.place_id as localisation, date_naissance, date_last_login
+                  FROM `user` AS u
+                  LEFT JOIN `user_position` AS u_p
+                  ON u_p.user_id = u.id
+                  WHERE `id` = $id";
         if($result = $this->db->query($query))
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
@@ -40,8 +52,10 @@ class User_model extends VK_Model {
         return FALSE;
     }
     function get_profils_for($uid, $sexe, $orientation){
-        $query = "SELECT id, prenom, nom, date_naissance, localisation
-                  FROM `user`
+        $query = "SELECT id, prenom, nom, date_naissance, u_p.lat, u_p.lng
+                  FROM `user` AS u
+                  LEFT JOIN `user_position` AS u_p
+                  ON u.id = u_p.user_id
                   WHERE status = 1
                   AND id <> $uid
                   AND `sexe`= $sexe

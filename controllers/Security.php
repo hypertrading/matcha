@@ -45,6 +45,7 @@ class Security extends VK_Controller {
         }
     }
     function new_user(){
+        $pos = $this->geoloc->get_coord();
         $inputs = array(
             'pseudo' => $_POST['pseudo'],
             'nom' => $_POST['nom'],
@@ -53,8 +54,10 @@ class Security extends VK_Controller {
             'date_naissance' => $_POST['date_naissance'],
             'password' => $_POST['password'],
             'sexe' => $_POST['sexe'],
-            'localisation' => $this->geoloc->get_place_id());
-        $this->array_debug($inputs);
+            'localisation' => $this->geoloc->get_place_id(),
+            'lat' => $pos['lat'],
+            'lng' => $pos['lng']);
+        //$this->array_debug($inputs);
 
         if (preg_match("/[A-Za-z _àèéùç-]/", $inputs['pseudo']) != 1 ) {
             $this->set(array('info' => 'Le champ speudo n\'est pas conforme.'));
@@ -72,7 +75,7 @@ class Security extends VK_Controller {
             $this->set(array('info' => 'Le champ email n\'est pas conforme.'));
             $this->views('security/register');
         }
-        else if (preg_match("/^(19|20)([0-9](2))[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/", $inputs['date_naissance']) != 1) {
+        else if (!$this->valid_date($inputs['date_naissance'])) {
             $this->set(array('info' => 'Le champ date de naissance n\'est pas conforme.'));
             $this->views('security/register');
         }

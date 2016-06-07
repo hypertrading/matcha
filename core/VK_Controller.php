@@ -73,5 +73,10 @@ class VK_Controller
         }
         array_multisort($sort_col, $dir, $arr);
     }
+    function valid_date($date, $format = 'Y-m-d')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
+    }
 }
 ?>
