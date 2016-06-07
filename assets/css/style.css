@@ -82,15 +82,9 @@ a{
 .no-link{
     color: #333;
 }
-
-
-/**
-====                            Header
-**/
-
-
-
-/**
-====                           Footer
-**/
-
+.pac-container{
+    z-index: 1050;
+}
+.pac-logo::after{
+    display: none;
+}

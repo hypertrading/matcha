@@ -11,7 +11,10 @@ include 'views/header.php'; ?>
             <?= ucfirst($pseudo) ?>
             <small><a href="#" data-toggle="modal" data-target=".edit-profil"><i class="glyphicon glyphicon-edit"></i></a></small>
         </h2>
-        <p>Localisation : <?=$localisation?></p>
+        <p>
+            Localisation : <?=$localisation?>
+            <small><a href="#" data-toggle="modal" data-target=".edit-position"><i class="glyphicon glyphicon-edit"></i></a></small>
+        </p>
     </div>
     <div class="col-md-3 col-sm-3 col-xs-8">
         <?php if(!isset($images[0])){ ?>
@@ -60,104 +63,31 @@ include 'views/header.php'; ?>
                 Ajouter un tag
                 <input type="text" name="tag">
             </label>
+            <button type="submit" class="btn btn-default">Ajouter</button>
         </form>
     </div>
 </div>
 
-<!-- Ajouter une photo-->
-<div class="modal fade edit_avatar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Ajouter une photo</h4>
-            </div>
-            <div class="modal-body">
-                <p>Maximum 2Mo, format JPEG obligatoire.</p>
-                <form enctype="multipart/form-data" method="post" action="<?= $this->base_url()?>user/add_picture">
-                <input type="file" name="picture" class="filestyle" accept="image/jpeg">
-            </div>
-            <div class="modal-footer">
-                <input type="submit" value="Envoyer">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<?php include 'views/user/edit_position.php'?>
+<?php include 'views/user/edit_photo.php'?>
+<?php include 'views/user/edit_description.php'?>
+<?php include 'views/user/edit_info.php'?>
 
-    <!-- Editer description -->
-    <div class="modal fade edit-description" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Description</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="<?= $this->base_url()?>user/edit_description">
-                        <textarea class="form-control" name="description" rows="3"><?= $description?></textarea>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Envoyer">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Modification des informations personnelles -->
-    <div class="modal fade edit-profil" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Modifier mes informations</h4>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
-                        <label>Pseudo :</label>
-                        <input name="pseudo"  value="<?= $pseudo?>" type="text" class="form-control input-sm" placeholder="Pseudo">
-                        <label>Nom :</label>
-                        <input name="nom"  value="<?= $_SESSION['user']['nom'] ?>" type="text" class="form-control input-sm" placeholder="Nom">
-                        <label>Prénom :</label>
-                        <input name="prenom" value="<?= $_SESSION['user']['prenom'] ?>" type="text" class="form-control input-sm" placeholder="Prénom">
-                        <label>Email :</label>
-                        <input name="email"  value="<?= $_SESSION['user']['email'] ?>" type="email" class="form-control input-sm" placeholder="Adresse Mail">
-                        <label>Date de naissance:</label>
-                        <input name="date_naissance"  value="<?= $_SESSION['user']['date_naissance'] ?>" class="form-control input-sm" type="date">
-                        <div class="radio no_line_height">
-                            <label class="radio-inline">
-                                <input name="sexe" type="radio" id= "inlineRadio1" value="1" <?php if($_SESSION['user']['sexe'] == 1){echo "checked";} ;?>>
-                                Homme
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label class="radio-inline">
-                                <input name="sexe" type="radio" id="inlineRadio2" value="2" <?php if($_SESSION['user']['sexe'] == 2){echo "checked";} ;?>>
-                                Femme
-                            </label>
-                        </div>
-                        <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 0){echo 'active';}?>">
-                                <input type="radio" name="orientation" id="orientation1" value="0" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 0){echo 'checked';}?>> Bisexuel
-                            </label>
-                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 1){echo 'active';}?>">
-                                <input type="radio" name="orientation" id="orientation2" value="1" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 1){echo 'checked';}?>> Hétérosexuel
-                            </label>
-                            <label class="btn btn-sm btn-default <?php if($_SESSION['user']['orientation'] == 2){echo 'active';}?>">
-                                <input type="radio" name="orientation" id="orientation3" value="2" autocomplete="off" <?php if($_SESSION['user']['orientation'] == 2){echo 'checked';}?>> Homosexuel
-                            </label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-12 valider">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Valider</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+    var placeSearch, autocomplete;
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['geocode']});
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        console.log(place.place_id);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvYkrx4RvWzS38k7SlCSpiYTbcvrcLk5k&signed_in=true&libraries=places&callback=initAutocomplete" async defer>
+</script>
 
 <?php include 'views/footer.php'; ?>
