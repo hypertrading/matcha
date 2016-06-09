@@ -29,7 +29,7 @@ foreach ($profils AS $profil){ ?>
                 </a>
                 <p class="text-center">
                     <span class="age"><?= $profil['age']?></span> ans |
-                    <span class="dist"><?= $profil['distance']?></span></p>
+                    <span class="dist"><?= $profil['distance']?></span> kms</p>
                 <p class="text-center">
                     <?php if($profil['like'] == TRUE){ ?>
                         <a href="<?=$this->base_url()?>match/unlike?t=<?=$profil['id']?>" class="btn btn-warning" role="button">
@@ -58,13 +58,13 @@ foreach ($profils AS $profil){ ?>
     $("#order").change(function(){
         if($(this).val() == '1'){
             var orderbyage = $divs.sort(function (a, b) {
-                return $(a).find("p span.age").text() > $(b).find("p span.age").text();
+                return $(a).find("p span.age").html() > $(b).find("p span.age").html();
             });
             $("#box_profil").html(orderbyage);
         }
         if($(this).val() == '2'){
             var orderbydistance = $divs.sort(function (a, b) {
-                return $(a).find("p span.dist").text() > $(b).find("p span.dist").text();
+                return $(a).find("p span.dist").html() < $(b).find("p span.dist").html();
             });
             $("#box_profil").html(orderbydistance);
         }
