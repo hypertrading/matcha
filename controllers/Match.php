@@ -9,6 +9,7 @@ class Match extends VK_Controller {
         $pref_s = $_SESSION['user']['orientation'];
         $uid = $_SESSION['user']['id'];
         $usexe = $_SESSION['user']['sexe'];
+        $c_user = $this->load_c('user');
 
         //Recupere les profil en focntion de l'orientation
         if($pref_s == 0) {
@@ -34,7 +35,6 @@ class Match extends VK_Controller {
                 $profils = $this->user_model->get_profils_for($uid, 2, 1);
         }
 
-        //Pour chaque profil, calcule le score de match et ajoute des infos (img, like, localisation)
         foreach ($profils as &$profil) {
             $pid = $profil['id'];
             if($this->user_model->is_report($uid, $pid)[0] > 0){
@@ -50,12 +50,9 @@ class Match extends VK_Controller {
                             $occurencetag++;
                     }
                 }
-                $visit = $this->user_model->already_visit($pid, $uid) ? 2 : 0;
-
-
-                $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
+                $profil['pop'] = $c_user->calcul_pop($pid);
                 $profil['like'] = $this->like_model->is_like($uid, $pid) ? TRUE : FALSE;
-
+                $profil['age'] = round ((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
 
                 $img = $this->picture_model->get_user_pict($pid);
                 $this->array_sort_by_column($img, 'avatar');
@@ -64,17 +61,17 @@ class Match extends VK_Controller {
                 $mylat = $_SESSION['user']['lat'];
                 $mylng = $_SESSION['user']['lng'];
                 $profil['distance'] = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
+
+                $visit_me = $this->user_model->already_visit($pid, $uid) ? 1 : 0;
+                $like_me = $this->like_model->like_me($uid, $pid) ? 5 : 0;
                 $score_dist = round(20 - $profil['distance'], 0);
-                if($score_dist < 0)
-                    $score_dist = 0;
+                $score_dist = $score_dist < 0 ? 0 : $score_dist;
 
+                $profil['score'] = $occurencetag + $visit_me + $like_me + $score_dist / 2;
 
-                $profil['age'] = round ((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
-
-
-                $profil['score'] = $occurencetag + $visit + $like_me + $score_dist;
             }
         }
+        //Clean deleted profil and order other by score
         $profils = array_filter($profils);
         $this->array_sort_by_column($profils, 'score');
 

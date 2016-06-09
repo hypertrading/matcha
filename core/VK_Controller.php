@@ -34,6 +34,11 @@ class VK_Controller
         $this->vars = array_merge($this->vars, $data);
         $_SESSION['data'] = $data;
     }
+    function load_c($controller){
+        $controller = ucfirst($controller);
+        include_once 'controllers/'.$controller.'.php';
+        return new $controller;
+    }
     function views($filename) {
         extract($this->vars);
         require(ROOT . 'views/' . $filename . '.php');

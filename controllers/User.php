@@ -275,5 +275,12 @@ class User extends VK_Controller {
             }
         }
     }
+    function calcul_pop($pid){
+        $likes = count($this->like_model->get_like($pid));
+        $visits = count($this->user_model->get_visit($pid));
+        $ratio = $likes != 0 && $visits != 0 ? $visits / $likes : 0;
+        $pop = $likes + ($ratio * $likes);
+        return $pop;
+    }
 
 }

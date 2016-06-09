@@ -10,7 +10,7 @@ include 'header.php';
                         <option value="0">-</option>
                         <option value="1">Age</option>
                         <option value="2">Distance</option>
-                        <option value="3" disabled>Popularité</option>
+                        <option value="3">Popularité</option>
                     </select>
                 </label>
             </div>
@@ -29,7 +29,9 @@ foreach ($profils AS $profil){ ?>
                 </a>
                 <p class="text-center">
                     <span class="age"><?= $profil['age']?></span> ans |
-                    <span class="dist"><?= $profil['distance']?></span> kms</p>
+                    <span class="dist"><?= $profil['distance']?></span> kms |
+                    <i class="glyphicon glyphicon-fire"></i> <span class="pop"><?= $profil['pop']?></span>
+                </p>
                 <p class="text-center">
                     <?php if($profil['like'] == TRUE){ ?>
                         <a href="<?=$this->base_url()?>match/unlike?t=<?=$profil['id']?>" class="btn btn-warning" role="button">
@@ -58,19 +60,48 @@ foreach ($profils AS $profil){ ?>
     $("#order").change(function(){
         if($(this).val() == '1'){
             var orderbyage = $divs.sort(function (a, b) {
-                return $(a).find("p span.age").html() > $(b).find("p span.age").html();
+                a = parseInt($(a).find("span.age").text());
+                b = parseInt($(b).find("span.age").text());
+                if(a > b) {
+                    return 1;
+                } else if(a < b) {
+                    return -1;
+                } else {
+                    return 0;
+                }
             });
             $("#box_profil").html(orderbyage);
         }
         if($(this).val() == '2'){
             var orderbydistance = $divs.sort(function (a, b) {
-                return $(a).find("p span.dist").html() < $(b).find("p span.dist").html();
+                a = parseInt($(a).find("span.dist").text());
+                b = parseInt($(b).find("span.dist").text());
+                if(a > b) {
+                    return 1;
+                } else if(a < b) {
+                    return -1;
+                } else {
+                    return 0;
+                }
             });
             $("#box_profil").html(orderbydistance);
+        }
+        if($(this).val() == '3'){
+            var orderbypop = $divs.sort(function (a, b) {
+                a = parseInt($(a).find("span.pop").text());
+                b = parseInt($(b).find("span.pop").text());
+                if(a < b) {
+                    return 1;
+                } else if(a > b) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            $("#box_profil").html(orderbypop);
         }
     });
 </script>
 <?php
 include 'footer.php';
 ?>
-
