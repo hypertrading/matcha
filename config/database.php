@@ -1,17 +1,15 @@
 <?php
 class Setup_db
 {
-//    private $DB_DSN = "mysql:host=mysql-hypertrading.alwaysdata.net;dbname=hypertrading_matcha;charset=utf8";
-//    private $DB_USER = "121422";
-//    private $DB_PASSWORD = "rootme42";
-    
+    private $HOST = 'localhost';
     private $DB_USER = 'root';
-    private $DB_PASSWORD = '';
-    private $DB_DSN = 'mysql:host=localhost;dbname=matcha;charset=utf8';
+    private $DB_PASSWORD = 'root42';
+    private $DB_NAME = 'matcha';
+    private $CHARSET = 'utf8';
 
     function get_DSN()
     {
-        return $this->DB_DSN;
+        return "mysql:host=$this->HOST;dbname=$this->DB_NAME;charset=$this->CHARSET";
     }
     function get_USER()
     {

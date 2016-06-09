@@ -39,7 +39,7 @@ class VK_Controller
         require(ROOT . 'views/' . $filename . '.php');
     }
     function base_url() {
-        return 'http://' . $_SERVER['SERVER_NAME'] . '/matcha/';
+        return 'http://' . $_SERVER['SERVER_NAME'] . ':8080/matcha/';
     }
     function array_debug($array) {
         echo "<pre>" . print_r($array, TRUE) . "</pre>";
