@@ -11,6 +11,48 @@ class User_model extends VK_Model {
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
     }
+    function get_profil_min($id){
+        $query = "SELECT nom, prenom FROM `user` WHERE `id` = $id";
+        if($result = $this->db->query($query))
+            return $result->fetch(PDO::FETCH_ASSOC);
+        return FALSE;
+    }
+    function get_profil($id) {
+        $query = "SELECT id, pseudo, nom, prenom, description, u_p.lat, u_p.lng, u_p.place_id as localisation, date_naissance, date_last_login
+                  FROM `user` AS u
+                  LEFT JOIN `user_position` AS u_p
+                  ON u_p.user_id = u.id
+                  WHERE `id` = $id";
+        if($result = $this->db->query($query))
+            return $result->fetch(PDO::FETCH_ASSOC);
+        return FALSE;
+    }
+    function get_profils_for($uid, $sexe, $orientation){
+        $query = "SELECT id, prenom, nom, date_naissance, u_p.lat, u_p.lng
+                  FROM `user` AS u
+                  LEFT JOIN `user_position` AS u_p
+                  ON u.id = u_p.user_id
+                  WHERE status = 1
+                  AND id <> $uid
+                  AND `sexe`= $sexe
+                  AND `orientation` <> $orientation";
+        $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    function search_profils($uid, $sexe, $orientation, $date_min, $date_max){
+        $query = "SELECT id, prenom, nom, date_naissance, u_p.lat, u_p.lng
+                  FROM `user` AS u
+                  LEFT JOIN `user_position` AS u_p
+                  ON u.id = u_p.user_id
+                  WHERE status = 1
+                  AND id <> $uid
+                  AND `sexe`= $sexe
+                  AND `orientation` <> $orientation
+                  AND `date_naissance` < '$date_min'
+                  AND `date_naissance` > '$date_max'";
+        $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     function insert_user($data) {
         extract($data);
         $password = hash('whirlpool', $password);
@@ -29,20 +71,19 @@ class User_model extends VK_Model {
     function update_last_login($id) {
         $this->db->query("UPDATE `user` SET `date_last_login`='".date('Y-m-d H:i:s')."' WHERE id=".$id);
     }
-    function get_profil_min($id){
-        $query = "SELECT nom, prenom FROM `user` WHERE `id` = $id";
-        if($result = $this->db->query($query))
-            return $result->fetch(PDO::FETCH_ASSOC);
-        return FALSE;
-    }
-    function get_profil($id) {
-        $query = "SELECT id, pseudo, nom, prenom, description, u_p.lat, u_p.lng, u_p.place_id as localisation, date_naissance, date_last_login
-                  FROM `user` AS u
-                  LEFT JOIN `user_position` AS u_p
-                  ON u_p.user_id = u.id
-                  WHERE `id` = $id";
-        if($result = $this->db->query($query))
-            return $result->fetch(PDO::FETCH_ASSOC);
+    function update_profil($data, $uid){
+        extract($data);
+        $query = "UPDATE `user`
+                  SET `pseudo` = '$pseudo',
+                   `nom` = '$nom',
+                   `prenom` = '$prenom',
+                   `email` = '$email',
+                   `orientation` = $orientation,
+                   `sexe` = $sexe,
+                   `date_naissance` = '$date_naissance'
+                   WHERE `id` = $uid";
+        if($this->db->exec($query))
+            return TRUE;
         return FALSE;
     }
     function edit_description($id, $description) {
@@ -50,18 +91,6 @@ class User_model extends VK_Model {
         if($this->db->query($query))
             return TRUE;
         return FALSE;
-    }
-    function get_profils_for($uid, $sexe, $orientation){
-        $query = "SELECT id, prenom, nom, date_naissance, u_p.lat, u_p.lng
-                  FROM `user` AS u
-                  LEFT JOIN `user_position` AS u_p
-                  ON u.id = u_p.user_id
-                  WHERE status = 1
-                  AND id <> $uid
-                  AND `sexe`= $sexe
-                  AND `orientation` <> $orientation";
-        $result = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
     }
     function already_visit($uid, $id_visited){
         $query = "SELECT * FROM `visit` WHERE `user_visited` = $id_visited AND `user_visit` = $uid";
@@ -119,21 +148,6 @@ class User_model extends VK_Model {
     function value_unique($champ, $value, $uid){
         $query = "SELECT COUNT(*) FROM `user` WHERE `$champ` = '$value' AND `id` <> $uid";
         if($this->db->query($query)->fetchColumn() == 0)
-            return TRUE;
-        return FALSE;
-    }
-    function update_profil($data, $uid){
-        extract($data);
-        $query = "UPDATE `user`
-                  SET `pseudo` = '$pseudo',
-                   `nom` = '$nom',
-                   `prenom` = '$prenom',
-                   `email` = '$email',
-                   `orientation` = $orientation,
-                   `sexe` = $sexe,
-                   `date_naissance` = '$date_naissance'
-                   WHERE `id` = $uid";
-        if($this->db->exec($query))
             return TRUE;
         return FALSE;
     }

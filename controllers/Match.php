@@ -10,6 +10,8 @@ class Match extends VK_Controller {
         $uid = $_SESSION['user']['id'];
         $usexe = $_SESSION['user']['sexe'];
         $c_user = $this->load_c('user');
+        $mylat = $_SESSION['user']['lat'];
+        $mylng = $_SESSION['user']['lng'];
 
         //Recupere les profil en focntion de l'orientation
         if($pref_s == 0) {
@@ -58,8 +60,6 @@ class Match extends VK_Controller {
                 $this->array_sort_by_column($img, 'avatar');
                 $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
 
-                $mylat = $_SESSION['user']['lat'];
-                $mylng = $_SESSION['user']['lng'];
                 $profil['distance'] = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
 
                 $visit_me = $this->user_model->already_visit($pid, $uid) ? 1 : 0;
@@ -89,5 +89,88 @@ class Match extends VK_Controller {
         $this->like_model->unlike($_SESSION['user']['id'], $pid);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
+    }
+    function search_page(){
+        $this->views('search');
+    }
+    function search(){
+        if(!isset($_SESSION['user'])) {
+            echo '<p><strong>Vous devez etre connecter pour effectuer une recherche</strong></p>';
+            exit;
+        }
+        if(is_numeric($_POST['age_min']) && is_numeric($_POST['age_max'])){
+            if(is_numeric($_POST['dist_min']) && is_numeric($_POST['dist_max'])){
+                if(is_numeric($_POST['pop_min']) && is_numeric($_POST['pop_max'])){
+                    if(preg_match("/[A-Za-z0-9 ',_àâêèéùûôç-]/", $_POST['tag']) == 1 || $_POST['tag'] == NULL){
+
+                        $pref_s = $_SESSION['user']['orientation'];
+                        $uid = $_SESSION['user']['id'];
+                        $usexe = $_SESSION['user']['sexe'];
+                        $mylat = $_SESSION['user']['lat'];
+                        $mylng = $_SESSION['user']['lng'];
+                        $c_user = $this->load_c('user');
+
+                        $date_min = (new DateTime('now -'.$_POST["age_min"].' year'))->format('Y-m-d');
+                        $date_max = (new DateTime('now -'.$_POST["age_max"].' year'))->format('Y-m-d');
+
+                        //Recupere les profil en focntion de l'orientation
+                        if($pref_s == 0) {
+                            if ($usexe == 1) {
+                                $profils = $this->user_model->search_profils($uid, 1, 1, $date_min, $date_max);
+                                $profils = array_merge($profils, $this->user_model->search_profils($uid, 2, 2, $date_min, $date_max));
+                            }
+                            else {
+                                $profils = $this->user_model->search_profils($uid, 1, 2, $date_min, $date_max);
+                                $profils = array_merge($profils, $this->user_model->search_profils($uid, 2, 1, $date_min, $date_max));
+                            }
+                        }
+                        else if ($pref_s == 1) {
+                            if ($usexe == 1)
+                                $profils = $this->user_model->search_profils($uid, 2, 2, $date_min, $date_max);
+                            else
+                                $profils = $this->user_model->search_profils($uid, 1, 2, $date_min, $date_max);
+                        }
+                        else if ($pref_s == 2) {
+                            if ($usexe == 1)
+                                $profils = $this->user_model->search_profils($uid, 1, 1, $date_min, $date_max);
+                            else
+                                $profils = $this->user_model->search_profils($uid, 2, 1, $date_min, $date_max);
+                        }
+                        foreach($profils AS &$profil) {
+                            $pid = $profil['id'];
+                            $distance = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
+                            if($distance >= $_POST['dist_max'] || $distance <= $_POST['dist_min']) {
+                                $profil = NULL;
+                            }
+                            else {
+                                $profil['distance'] = $distance;
+                                $pop = $c_user->calcul_pop($pid);
+                                if ($pop >= $_POST['pop_max'] || $pop <= $_POST['pop_min']){
+                                    $profil = NULL;
+                                }
+                                else {
+                                    if(isset($_POST['tag'])) {
+                                        $ptags = $this->tag_model->get_tag($pid);
+                                        $tags = explode(",", $_POST['tag']);
+                                        while($tags){
+                                            if(in_array($tags, $ptags) == FALSE){
+                                                $profil = NULL;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //Clean deleted profil and order other by score
+                        $profils = array_filter($profils);
+                        $data = json_encode($profils);
+                        echo $data;
+                        exit;
+                    }
+                }
+            }
+        }
+        echo 'Error format !';
     }
 }

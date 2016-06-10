@@ -44,19 +44,26 @@ class VK_Controller
         require(ROOT . 'views/' . $filename . '.php');
     }
     function base_url() {
-        return 'http://' . $_SERVER['SERVER_NAME'] . ':8080/matcha/';
+        return 'http://' . $_SERVER['SERVER_NAME'] . '/matcha/';
     }
     function array_debug($array) {
-        echo "<pre>" . print_r($array, TRUE) . "</pre>";
+        return "<pre>" . print_r($array, TRUE) . "</pre>";
     }
+    function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
+        $sort_col = array();
+        foreach ($arr as $key => $row) {
+            $sort_col[$key] = $row[$col];
+        }
+        array_multisort($sort_col, $dir, $arr);
+    }
+
+    //Retourne le nombre de jours ecoule depuis cette date
     function get_the_day($date) {
         $datetime1 = new DateTime("now");
         $datetime2 = new DateTime($date);
         $datetime1->setTime(0, 0, 0);
         $datetime2->setTime(0, 0, 0);
-
         $interval = $datetime1->diff($datetime2);
-
         $interval = $interval->format('%a');
         switch ($interval) {
             case 0:
@@ -68,13 +75,6 @@ class VK_Controller
             default:
                 return 'Il y a ' . $interval . ' jours';
         }
-    }
-    function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
-        $sort_col = array();
-        foreach ($arr as $key => $row) {
-            $sort_col[$key] = $row[$col];
-        }
-        array_multisort($sort_col, $dir, $arr);
     }
     function valid_date($date, $format = 'Y-m-d') {
         $d = DateTime::createFromFormat($format, $date);

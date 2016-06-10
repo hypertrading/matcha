@@ -54,7 +54,6 @@ foreach ($profils AS $profil){ ?>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
     var $divs = $("div.profil");
     $("#order").change(function(){

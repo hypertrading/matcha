@@ -30,8 +30,7 @@ class Security extends VK_Controller {
                     if ($user['droits'] == 1)
                         $_SESSION['admin'] = 1;
                     $this->user_model->update_last_login($user['id']);
-                    $this->set(array('info' => 'Bonjour =)'));
-                    header('Location: ../welcome/index');
+                    header('Location: ../match/decouverte');
                 }
                 else {
                     $this->set(array('info' => 'Pas de correspondance email/mot de passe.'));

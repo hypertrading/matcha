@@ -8,6 +8,7 @@
     <link href="<?= $this->base_url();?>assets/css/style.css" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->base_url();?>assets/img/favicon.png">
     <link href='https://fonts.googleapis.com/css?family=Seaweed+Script' rel='stylesheet' type='text/css'>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 </head>
 <body>
 <div class="page">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?= $this->base_url();?>">Accueil</a></li>
+
                         <?php if(!isset($_SESSION['user']['id'])){ ?>
                             <li>
                                 <a href="<?= $this->base_url();?>Security/connexion">Connexion</a>
@@ -34,6 +35,9 @@
                         else { ?>
                             <li>
                                 <a href="<?= $this->base_url();?>match/decouverte">Decouverte</a>
+                            </li>
+                            <li>
+                                <a href="<?= $this->base_url();?>match/search_page">Recherche</a>
                             </li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -51,18 +55,6 @@
                             </li>
                         <?php } ?>
                     </ul>
-                    <form method="post" action="" class="navbar-form navbar-right">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="search" id="search" placeholder="Recherche" onkeyup="" autocomplete="off">
-                        <div id="suggestions">
-                            <div id="autosuggestionslist">
-                            </div>
-                        </div>
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default">Go !</button>
-                        </span>
-                    </div>
-                    </form>
                 </div>
             </div>
         </div>
