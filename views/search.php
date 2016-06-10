@@ -42,7 +42,7 @@
         <label>
             Trier par :
             <select class="form-control input-sm" id="order">
-                <option value="0">-</option>
+                <option value="0" disabled selected>-</option>
                 <option value="1">Age</option>
                 <option value="2">Distance</option>
                 <option value="3">Popularité</option>
