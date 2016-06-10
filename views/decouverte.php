@@ -56,6 +56,7 @@ foreach ($profils AS $profil){ ?>
 
 <script type="text/javascript">
     var $divs = $("div.profil");
+    console.log($divs);
     $("#order").change(function(){
         if($(this).val() == '1'){
             var orderbyage = $divs.sort(function (a, b) {

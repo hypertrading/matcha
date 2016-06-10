@@ -102,7 +102,6 @@ class Match extends VK_Controller {
             if(is_numeric($_POST['dist_min']) && is_numeric($_POST['dist_max'])){
                 if(is_numeric($_POST['pop_min']) && is_numeric($_POST['pop_max'])){
                     if(preg_match("/[A-Za-z0-9 ',_àâêèéùûôç-]/", $_POST['tag']) == 1 || $_POST['tag'] == NULL){
-
                         $pref_s = $_SESSION['user']['orientation'];
                         $uid = $_SESSION['user']['id'];
                         $usexe = $_SESSION['user']['sexe'];
@@ -139,23 +138,30 @@ class Match extends VK_Controller {
                         foreach($profils AS &$profil) {
                             $pid = $profil['id'];
                             $distance = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
-                            if($distance >= $_POST['dist_max'] || $distance <= $_POST['dist_min']) {
+                            $profil['distance'] = $distance;
+                            $profil['age'] = round ((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
+                            $profil['pop'] = $c_user->calcul_pop($pid);
+                            $img = $this->picture_model->get_user_pict($pid);
+                            $this->array_sort_by_column($img, 'avatar');
+                            $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
+
+                            if($distance < $_POST['dist_min'] || $distance > $_POST['dist_max']) {
                                 $profil = NULL;
                             }
                             else {
                                 $profil['distance'] = $distance;
                                 $pop = $c_user->calcul_pop($pid);
-                                if ($pop >= $_POST['pop_max'] || $pop <= $_POST['pop_min']){
+                                if ($pop > $_POST['pop_max'] || $pop < $_POST['pop_min']){
                                     $profil = NULL;
                                 }
                                 else {
-                                    if(isset($_POST['tag'])) {
-                                        $ptags = $this->tag_model->get_tag($pid);
-                                        $tags = explode(",", $_POST['tag']);
-                                        while($tags){
-                                            if(in_array($tags, $ptags) == FALSE){
+                                    if($_POST['tag'] != NULL) {
+                                        $ptags = $this->tag_model->get_tags($pid);
+                                        $tags = array_filter(explode(',', strtolower($_POST['tag'])));
+                                        //echo print_r($ptags);
+                                        for($i = 0; isset($tags[$i]); $i++){
+                                            if($ptags == NULL || in_array(strtolower(trim($tags[$i])), $ptags) == FALSE) {
                                                 $profil = NULL;
-                                                break;
                                             }
                                         }
                                     }
@@ -164,13 +170,13 @@ class Match extends VK_Controller {
                         }
                         //Clean deleted profil and order other by score
                         $profils = array_filter($profils);
-                        $data = json_encode($profils);
+                        $data = json_encode(array_values($profils));
                         echo $data;
                         exit;
                     }
                 }
             }
         }
-        echo 'Error format !';
+        echo json_encode(FALSE);
     }
 }
