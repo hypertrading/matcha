@@ -23,7 +23,7 @@ class Security extends VK_Controller {
             if ($user = $this->user_model->get_one_user($_POST['pseudo']))
             {
                 $passwd = hash("whirlpool", $_POST['password']);
-                if ($passwd == $user['password'] && $user['status'] == 1)
+                if ($passwd == $user['password'] && $user['status'] != 0)
                 {
                     $_SESSION['user'] = $user;
                     unset($_SESSION['user']['password']);

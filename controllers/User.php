@@ -21,9 +21,14 @@ class User extends VK_Controller {
         $this->views('user/my_profil');
     }
     function profil($pid){
-        if(!isset($_SESSION['user']) || $this->user_model->is_report($_SESSION['user']['id'], $pid)[0] > 0) {
+        if(!isset($_SESSION['user'])) {
             $this->set(array('info' => 'Vous devez etre connecter pour acceder à cet page'));
-            header('Location: '.$this->base_url());
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
+        }
+        if($this->user_model->is_report($_SESSION['user']['id'], $pid)[0] > 0) {
+            $this->set(array('info' => 'Vous avez bloque cette personne. Ne vous infliger pas cela.'));
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
         }
         $uid = $_SESSION['user']['id'];
@@ -33,7 +38,7 @@ class User extends VK_Controller {
         }
         if(!$this->user_model->already_visit($uid, $pid)){
             $this->user_model->log_visit($uid, $pid);
-            $this->notification_model->add_notification($pid, 1);
+            $this->notification_model->add_notification($pid, 1, $uid);
         }
         $profil['profil'] = $this->user_model->get_profil($pid);
 

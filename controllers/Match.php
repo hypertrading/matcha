@@ -81,7 +81,7 @@ class Match extends VK_Controller {
     }
     function like($pid){
         $this->like_model->like($_SESSION['user']['id'], $pid);
-        $this->notification_model->add_notification($pid, 1);
+        $this->notification_model->add_notification($pid, 1, $_SESSION['user']['id']);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }

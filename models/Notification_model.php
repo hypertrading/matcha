@@ -2,7 +2,12 @@
 include_once 'core/VK_Model.php';
 class Notification_model extends VK_Model {
     function as_notification($uid) {
-        $query = "SELECT * FROM `notification` WHERE `user_id` = $uid";
+        $query = "SELECT n.* 
+                    FROM `notification` AS n
+                    LEFt JOIN `user_report` AS ur 
+                    ON n.from_id = ur.user_reported
+                    WHERE n.user_id = $uid
+                    AND ur.user_report <> $uid";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
     function add_notification($pid, $type, $from = -1) {
@@ -21,4 +26,13 @@ class Notification_model extends VK_Model {
         return FALSE;
     }
 }
+/*
+SELECT n.*
+FROM `notification` AS n
+LEFt JOIN `user_report` AS ur
+ON n.from_id = ur.user_reported
+WHERE n.user_id = $uid
+AND ur.user_report <> $uid";
+*/
 ?>
+
