@@ -17,6 +17,12 @@ class User_model extends VK_Model {
             return $result->fetch(PDO::FETCH_ASSOC);
         return FALSE;
     }
+    function get_info_min($email){
+        $query = "SELECT id, nom, prenom FROM `user` WHERE `email` = '$email'";
+        if($result = $this->db->query($query))
+            return $result->fetch(PDO::FETCH_ASSOC);
+        return FALSE;
+    }
     function get_profil($id) {
         $query = "SELECT id, pseudo, nom, prenom, description, u_p.lat, u_p.lng, u_p.place_id as localisation, date_naissance, date_last_login
                   FROM `user` AS u
@@ -70,6 +76,12 @@ class User_model extends VK_Model {
     }
     function update_last_login($id) {
         $this->db->query("UPDATE `user` SET `date_last_login`='".date('Y-m-d H:i:s')."' WHERE id=".$id);
+    }
+    function new_password($password, $uid){
+        $query = "UPDATE `user` SET `password` = '$password' WHERE `id` = $uid";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
     }
     function update_profil($data, $uid){
         extract($data);

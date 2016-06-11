@@ -44,10 +44,10 @@ class VK_Controller
         require(ROOT . 'views/' . $filename . '.php');
     }
     function base_url() {
-        return 'http://' . $_SERVER['SERVER_NAME'] . '/matcha/';
+        return 'http://' . $_SERVER['SERVER_NAME'] . ':8080/matcha/';
     }
     function array_debug($array) {
-        return "<pre>" . print_r($array, TRUE) . "</pre>";
+        echo "<pre>" . print_r($array, TRUE) . "</pre>";
     }
     function array_sort_by_column(&$arr, $col, $dir = SORT_DESC) {
         $sort_col = array();
