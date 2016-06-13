@@ -62,6 +62,7 @@ class User extends VK_Controller {
         if($profil['like'])
             $profil['connected'] = $this->like_model->is_like($pid, $uid) ? TRUE : FALSE;
         $profil['profil']['age'] = round ((time() - strtotime($profil['profil']['date_naissance'])) / 3600 / 24 / 365);
+        $profil['profil']['pop'] = $this->calcul_pop($pid);
         $this->set($profil);
         $this->views('user/profil');
     }

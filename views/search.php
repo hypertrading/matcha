@@ -105,7 +105,7 @@
 
                     var span_age = document.createElement('span');
                     span_age.className = 'age';
-                    var age =  document.createTextNode(profil['age']);
+                    var age =  document.createTextNode(profil['age']+' ans | ');
                     span_age.appendChild(age);
                     var span_dist = document.createElement('span');
                     span_dist.className = 'dist';
