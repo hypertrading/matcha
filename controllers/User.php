@@ -78,8 +78,14 @@ class User extends VK_Controller {
                 $visit['visitor'] = $this->user_model->get_profil_min($visit['user_visit']);
         }
         $data['likes'] = $this->like_model->get_like($uid);
+        foreach($data['likes'] AS $like){
+            if($this->like_model->like_me($like['id'], $uid)){
+                $data['connect'][] = $like;
+            }
+        }
         $data['visits'] = $visits;
         $_SESSION['notif'] = FALSE;
+        $_SESSION['notif_like'] = TRUE;
         $this->notification_model->rm_notification($uid, 1);
         if(isset($this->notification_model->as_notification($uid)[0])){
             $_SESSION['notif'] = 1;
