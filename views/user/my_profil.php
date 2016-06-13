@@ -24,8 +24,11 @@ include 'views/header.php'; ?>
                 <img src="<?= $this->base_url().$images[0]['path']?>" class="photo_profil">
                 <a href="<?= $this->base_url().'user/rm_picture?t='.$images[0]['id']?>" class="img-rm"><i class='glyphicon glyphicon-trash'></i></a>
             </div>
-        <?php }?>
+        <?php }
+        if(!isset($images[4])){
+        ?>
         <button data-toggle="modal" data-target=".edit_avatar" class="btn">Ajouter une photo</button>
+        <?php } ?>
     </div>
     <div class="col-md-9 col-sm-9 col-xs-8">
         <?php for($i = 1; isset($images[$i]); $i++){?>
