@@ -146,32 +146,36 @@ class Match extends VK_Controller {
                                 $profils = $this->user_model->search_profils($uid, 2, 1, $date_min, $date_max);
                         }
                         foreach($profils AS &$profil) {
-                            $pid = $profil['id'];
-                            $distance = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
-                            $profil['distance'] = $distance;
-                            $profil['age'] = round ((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
-                            $profil['pop'] = $c_user->calcul_pop($pid);
-                            $img = $this->picture_model->get_user_pict($pid);
-                            $this->array_sort_by_column($img, 'avatar');
-                            $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/'.$img[0]['id'].'.jpg' : 'assets/img/user_photo/defaultprofil.gif';
 
-                            if($distance < $_POST['dist_min'] || $distance > $_POST['dist_max']) {
+                            $pid = $profil['id'];
+                            if($this->user_model->is_report($uid, $pid)[0] > 0){
                                 $profil = NULL;
                             }
                             else {
+                                $distance = round($this->geoloc->get_distance_m($profil['lat'], $profil['lng'], $mylat, $mylng) / 1000, 1);
                                 $profil['distance'] = $distance;
-                                $pop = $c_user->calcul_pop($pid);
-                                if ($pop > $_POST['pop_max'] || $pop < $_POST['pop_min']){
+                                $profil['age'] = round((time() - strtotime($profil['date_naissance'])) / 3600 / 24 / 365);
+                                $profil['pop'] = $c_user->calcul_pop($pid);
+                                $img = $this->picture_model->get_user_pict($pid);
+                                $this->array_sort_by_column($img, 'avatar');
+                                $profil['images'] = isset($img[0]) ? 'assets/img/user_photo/' . $img[0]['id'] . '.jpg' : 'assets/img/user_photo/defaultprofil.gif';
+
+                                if ($distance < $_POST['dist_min'] || $distance > $_POST['dist_max']) {
                                     $profil = NULL;
-                                }
-                                else {
-                                    if($_POST['tag'] != NULL) {
-                                        $ptags = $this->tag_model->get_tags($pid);
-                                        $tags = array_filter(explode(',', strtolower($_POST['tag'])));
-                                        //echo print_r($ptags);
-                                        for($i = 0; isset($tags[$i]); $i++){
-                                            if($ptags == NULL || in_array(strtolower(trim($tags[$i])), $ptags) == FALSE) {
-                                                $profil = NULL;
+                                } else {
+                                    $profil['distance'] = $distance;
+                                    $pop = $c_user->calcul_pop($pid);
+                                    if ($pop > $_POST['pop_max'] || $pop < $_POST['pop_min']) {
+                                        $profil = NULL;
+                                    } else {
+                                        if ($_POST['tag'] != NULL) {
+                                            $ptags = $this->tag_model->get_tags($pid);
+                                            $tags = array_filter(explode(',', strtolower($_POST['tag'])));
+                                            //echo print_r($ptags);
+                                            for ($i = 0; isset($tags[$i]); $i++) {
+                                                if ($ptags == NULL || in_array(strtolower(trim($tags[$i])), $ptags) == FALSE) {
+                                                    $profil = NULL;
+                                                }
                                             }
                                         }
                                     }
