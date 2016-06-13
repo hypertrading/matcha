@@ -13,14 +13,13 @@ class Welcome extends VK_Controller{
             foreach($notifs AS $notif){
                 if($notif['type'] == 1){
                     $_SESSION['notif_like'] = TRUE;
-                    echo 1;
                 }
                 else if ($notif['type'] == 2){
                     $_SESSION['notif_msg'] = TRUE;
-                    echo 2;
                 }
             }
-            $_SESSION['notif'] = 1;
+            echo 1;
+            $_SESSION['notif'] = TRUE;
         }
         else {
             $_SESSION['notif'] = FALSE;

@@ -38,7 +38,7 @@ class User_model extends VK_Model {
                   FROM `user` AS u
                   LEFT JOIN `user_position` AS u_p
                   ON u.id = u_p.user_id
-                  WHERE status = 1
+                  WHERE status <> 0
                   AND id <> $uid
                   AND `sexe`= $sexe
                   AND `orientation` <> $orientation";
