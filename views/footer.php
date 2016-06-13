@@ -25,7 +25,7 @@
                     $('#notif_bord').addClass('hidden');
                 }
             });
-        },3000);
+        },1000);
         setInterval(function(){
             $.post("<?= $this->base_url()?>welcome/ping", {}, function(data){});
         },5000);
