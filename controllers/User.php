@@ -122,7 +122,8 @@ class User extends VK_Controller {
         $path = 'assets/img/user_photo/'.$pid.'.jpg';
         imagejpeg($image, $path);
         unset($_FILES['picture']);
-        $this->set(array('info' => 'Geute'));
+        $this->user_model->update_status($uid, 2);
+        $_SESSION['user']['status'] = 2;
         header('Location: my_profil');
         exit;
     }
@@ -163,6 +164,12 @@ class User extends VK_Controller {
                 $this->picture_model->rm_pict($id);
                 $path = 'assets/img/user_photo/'.$id.'.jpg';
                 unlink($path);
+                $pict = $this->picture_model->get_user_pict($uid);
+                if(isset($pict)) {
+                    $this->user_model->update_status($uid, 1);
+                    $_SESSION['user']['status'] = 1;
+                    echo 'oui';
+                }
             }
         }
         $this->profil($uid);

@@ -80,12 +80,22 @@ class Match extends VK_Controller {
         $this->views('decouverte');
     }
     function like($pid){
+        if($_SESSION['user']['status'] == 1){
+            $this->set(array('info' => 'Vous devez avoir une photo pour effectué cet action.'));
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
+        }
         $this->like_model->like($_SESSION['user']['id'], $pid);
         $this->notification_model->add_notification($pid, 1, $_SESSION['user']['id']);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }
     function unlike($pid){
+        if($_SESSION['user']['status'] == 1){
+            $this->set(array('info' => 'Vous devez avoir une photo pour effectué cet action.'));
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
+        }
         $this->like_model->unlike($_SESSION['user']['id'], $pid);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;

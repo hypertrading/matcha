@@ -1,6 +1,5 @@
-<?php
-include 'views/header.php';
-?>
+<?php include 'views/header.php'; ?>
+
 <div class="row">
     <div class="col-md-6">
         <h3>Dernières visites sur mon profil</h3>
@@ -14,7 +13,6 @@ include 'views/header.php';
         <?php } ?>
         </ul>
     </div>
-
     <div class="col-md-6">
         <h3>Ils me likes</h3>
         <ul>
@@ -41,7 +39,4 @@ include 'views/header.php';
     </div>
 </div>
 
-<?php
-include 'views/footer.php';
-?>
-
+<?php include 'views/footer.php'; ?>

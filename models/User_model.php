@@ -163,5 +163,11 @@ class User_model extends VK_Model {
             return TRUE;
         return FALSE;
     }
+    function update_status($uid, $status){
+        $query = "UPDATE `user` SET `status` = $status WHERE `id` = $uid";
+        if($this->db->exec($query))
+            return TRUE;
+        return FALSE;
+    }
 }
 ?>
